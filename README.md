@@ -65,6 +65,11 @@ This project is built with:
 Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
 
 ## Can I connect a custom domain to my Lovable project?
+# My Awesome Lego Castle 🏰
+
+Click this button to start the robot!
+
+[![Check Compliance](https://img.shields.io/badge/PUSH-Check_Compliance-brightgreen?style=for-the-badge&logo=github)](PASTE_YOUR_SECRET_LINK_HERE)
 
 Yes, you can!
 
