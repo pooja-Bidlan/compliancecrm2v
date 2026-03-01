@@ -1,3 +1,4 @@
+import { Linkedin } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -16,6 +17,7 @@ export function ArchiveTab({ rows, onUpdateResponse }: ArchiveTabProps) {
           <TableRow className="bg-muted/50">
             <TableHead className="font-bold">Entity</TableHead>
             <TableHead className="font-bold">Category</TableHead>
+            <TableHead className="font-bold">LinkedIn</TableHead>
             <TableHead className="font-bold">Status</TableHead>
             <TableHead className="font-bold">Response</TableHead>
           </TableRow>
@@ -30,6 +32,20 @@ export function ArchiveTab({ rows, onUpdateResponse }: ArchiveTabProps) {
                 </div>
               </TableCell>
               <TableCell className="text-sm">{row.category}</TableCell>
+              <TableCell>
+                <div className="flex gap-2">
+                  {(row as any).linkedinContact && (
+                    <a href={(row as any).linkedinContact} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+                      <Linkedin className="h-4 w-4" />
+                    </a>
+                  )}
+                  {(row as any).linkedinCompany && (
+                    <a href={(row as any).linkedinCompany} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+                      <Linkedin className="h-4 w-4 opacity-60" />
+                    </a>
+                  )}
+                </div>
+              </TableCell>
               <TableCell>
                 <Badge variant={row.status === "New" ? "outline" : "default"} className="text-xs">
                   {row.status}

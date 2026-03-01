@@ -1,4 +1,4 @@
-import { Briefcase, Users, RefreshCcw } from "lucide-react";
+import { Briefcase, Users, RefreshCcw, Linkedin } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -41,6 +41,15 @@ export function InboxTab({ logs, activeView, onUpdateResponse, onFollowUp }: Inb
               </div>
             </div>
             <div className="flex flex-wrap items-center gap-2">
+              <a
+                href={`https://linkedin.com/search/results/all/?keywords=${encodeURIComponent(log.contact_person + " " + log.target_name)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center h-8 w-8 rounded-md text-primary hover:bg-muted transition-colors"
+                title="Find on LinkedIn"
+              >
+                <Linkedin className="h-4 w-4" />
+              </a>
               {statuses.map((st) => (
                 <Button
                   key={st}
