@@ -29,7 +29,14 @@ export function useUserProfile() {
 
   const updateProfile = async (updates: Partial<UserProfile>) => {
     if (!user || !profile) return;
-    await supabase.from("user_profiles").update(updates).eq("id", profile.id);
+
+    const { data, error } = await supabase.functions.invoke("validate-profile", {
+      body: updates,
+    });
+
+    if (error) throw new Error(error.message || "Validation failed");
+    if (data?.error) throw new Error(data.error);
+
     setProfile({ ...profile, ...updates });
   };
 
