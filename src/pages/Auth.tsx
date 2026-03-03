@@ -7,7 +7,6 @@ import { useToast } from "@/hooks/use-toast";
 import { ShieldCheck, Mail, Lock, ArrowRight } from "lucide-react";
 
 export default function Auth() {
-  const [isLogin, setIsLogin] = useState(true);
   const [isForgot, setIsForgot] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -31,18 +30,9 @@ export default function Auth() {
       return;
     }
 
-    if (isLogin) {
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
-      if (error) {
-        toast({ title: "Login failed", description: error.message, variant: "destructive" });
-      }
-    } else {
-      const { error } = await supabase.auth.signUp({ email, password, options: { emailRedirectTo: window.location.origin } });
-      if (error) {
-        toast({ title: "Signup failed", description: error.message, variant: "destructive" });
-      } else {
-        toast({ title: "Check your email", description: "Confirm your account to continue." });
-      }
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) {
+      toast({ title: "Login failed", description: error.message, variant: "destructive" });
     }
     setLoading(false);
   };
@@ -55,14 +45,12 @@ export default function Auth() {
             <ShieldCheck className="h-7 w-7 text-primary-foreground" />
           </div>
           <CardTitle className="text-2xl font-bold tracking-tight">
-            {isForgot ? "Reset Password" : isLogin ? "Welcome Back" : "Create Account"}
+            {isForgot ? "Reset Password" : "Welcome Back"}
           </CardTitle>
           <CardDescription>
             {isForgot
               ? "Enter your email to receive a reset link"
-              : isLogin
-              ? "Sign in to your compliance dashboard"
-              : "Start managing your outreach pipeline"}
+              : "Sign in to your compliance dashboard"}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -93,7 +81,7 @@ export default function Auth() {
               </div>
             )}
             <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? "Loading..." : isForgot ? "Send Reset Link" : isLogin ? "Sign In" : "Sign Up"}
+              {loading ? "Loading..." : isForgot ? "Send Reset Link" : "Sign In"}
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </form>
@@ -106,14 +94,6 @@ export default function Auth() {
                 Forgot password?
               </button>
             )}
-            <div>
-              <button
-                onClick={() => { setIsLogin(!isLogin); setIsForgot(false); }}
-                className="text-sm font-medium text-primary hover:underline"
-              >
-                {isLogin ? "Need an account? Sign up" : "Already have an account? Sign in"}
-              </button>
-            </div>
             {isForgot && (
               <button
                 onClick={() => setIsForgot(false)}
