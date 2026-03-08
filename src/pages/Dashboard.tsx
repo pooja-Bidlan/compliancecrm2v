@@ -192,6 +192,7 @@ export default function Dashboard() {
         : activeView === "ComplianceHead" ? "Chief Compliance Officers & Compliance Heads"
         : activeView === "CSJob" ? "Company Secretaries in Service"
         : activeView === "CFO" ? "CFOs & Chief Finance Officers"
+        : activeView === "USACompliance" ? "USA Listed Companies — Chief Compliance Officers"
         : "Coaching Institutes Database"
       : "Regulatory CEO Outreach",
     Archive: "Master Archive",
