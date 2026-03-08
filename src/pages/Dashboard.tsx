@@ -267,6 +267,7 @@ export default function Dashboard() {
               {activeTab === "Sourcing" && activeView === "ComplianceHead" && <ComplianceHeadTable records={complianceHeads} />}
               {activeTab === "Sourcing" && activeView === "CSJob" && <CSJobTable records={csJobRecords} />}
               {activeTab === "Sourcing" && activeView === "CFO" && <CFOTable records={cfoRecords} />}
+              {activeTab === "Sourcing" && activeView === "USACompliance" && <USAComplianceTable records={usaCompliance} />}
               {activeTab === "Sourcing" && isEnrichedMode && !CUSTOM_VIEWS.includes(activeView) && (
                 <EnrichedTable companies={enrichedCompanies} type={activeView as "SaaS" | "AI"} />
               )}
