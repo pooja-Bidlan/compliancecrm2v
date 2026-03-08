@@ -1,4 +1,4 @@
-import { Briefcase, Users, Rocket, Archive, Inbox, Download, UserCircle, Building2, Bot, Landmark, GraduationCap, Newspaper, Scale, FileText, BookOpen, Calculator, ShieldCheck, ScrollText, BadgeDollarSign, Flag } from "lucide-react";
+import { Briefcase, Users, Rocket, Archive, Inbox, Download, UserCircle, Building2, Bot, Landmark, GraduationCap, Newspaper, Scale, FileText, BookOpen, Calculator, ShieldCheck, ScrollText, BadgeDollarSign, Flag, LogOut } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
