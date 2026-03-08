@@ -103,6 +103,7 @@ export default function Dashboard() {
   const complianceHeads = useMemo(() => activeView === "ComplianceHead" ? getComplianceHeads() : [], [activeView]);
   const csJobRecords = useMemo(() => activeView === "CSJob" ? getCSJobRecords() : [], [activeView]);
   const cfoRecords = useMemo(() => activeView === "CFO" ? getCFORecords() : [], [activeView]);
+  const usaCompliance = useMemo(() => activeView === "USACompliance" ? getUSACompliance() : [], [activeView]);
 
   const currentLeads = !isEnrichedMode ? ceos : [] as Lead[];
   const filteredLeads = currentLeads.filter(
