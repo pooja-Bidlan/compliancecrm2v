@@ -38,6 +38,9 @@ const modeItems: { id: ViewMode; icon: typeof Briefcase; label: string; count?: 
   { id: "MCA", icon: FileText, label: "MCA Listed (Foreign Dir.)", count: "40K" },
   { id: "ICSI", icon: BookOpen, label: "ICSI Practice", count: "20K" },
   { id: "ICAI", icon: Calculator, label: "ICAI Practice", count: "20K" },
+  { id: "ComplianceHead", icon: ShieldCheck, label: "Compliance Heads", count: "50K" },
+  { id: "CSJob", icon: ScrollText, label: "CS in Service", count: "50K" },
+  { id: "CFO", icon: BadgeDollarSign, label: "CFOs / Chief Finance", count: "50K" },
 ];
 
 export function AppSidebar({ activeView, setActiveView, activeTab, setActiveTab, onExport }: AppSidebarProps) {
