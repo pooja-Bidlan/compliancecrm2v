@@ -207,6 +207,7 @@ export default function Dashboard() {
         : activeView === "AI" ? "AI Companies Database"
         : activeView === "BFSI" ? "BFSI Companies Database"
         : activeView === "CEOs" ? "Funded CEOs Database"
+        : activeView === "MarketIntel" ? "Market Intelligence"
         : "Coaching Institutes Database"
       : activeView === "Jobs" ? "Remote FCCO / FCO Hunt" : "Regulatory CEO Outreach",
     Archive: "Master Archive",
