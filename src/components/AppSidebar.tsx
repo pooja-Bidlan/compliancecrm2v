@@ -32,23 +32,23 @@ export function AppSidebar({ activeView, setActiveView, activeTab, setActiveTab,
 
   return (
     <Sidebar>
-      <SidebarHeader className="p-4">
+      <SidebarHeader className="p-5">
         <div className="flex items-center gap-3">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-sidebar-primary">
-            <Briefcase className="h-5 w-5 text-sidebar-primary-foreground" />
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary shadow-md">
+            <Briefcase className="h-5 w-5 text-primary-foreground" />
           </div>
           <div>
-            <p className="text-sm font-bold text-sidebar-foreground">Compliance HQ</p>
-            <p className="text-[10px] text-sidebar-foreground/50 uppercase tracking-widest">Outreach Engine</p>
+            <p className="text-sm font-bold text-sidebar-foreground tracking-tight">Compliance HQ</p>
+            <p className="text-[10px] text-sidebar-foreground/40 uppercase tracking-[0.2em] font-medium">Outreach Engine</p>
           </div>
         </div>
       </SidebarHeader>
 
-      <SidebarSeparator />
+      <SidebarSeparator className="opacity-20" />
 
-      <SidebarContent>
+      <SidebarContent className="px-2">
         <SidebarGroup>
-          <SidebarGroupLabel>Mode</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-[10px] uppercase tracking-[0.15em] text-sidebar-foreground/40 font-semibold px-3">Mode</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
@@ -56,9 +56,10 @@ export function AppSidebar({ activeView, setActiveView, activeTab, setActiveTab,
                   isActive={activeView === "Jobs"}
                   onClick={() => { setActiveView("Jobs"); setActiveTab("Sourcing"); }}
                   tooltip="Remote Jobs"
+                  className="rounded-lg transition-all duration-200"
                 >
                   <Briefcase className="h-4 w-4" />
-                  <span>Remote Jobs</span>
+                  <span className="font-medium">Remote Jobs</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
@@ -66,19 +67,20 @@ export function AppSidebar({ activeView, setActiveView, activeTab, setActiveTab,
                   isActive={activeView === "CEOs"}
                   onClick={() => { setActiveView("CEOs"); setActiveTab("Sourcing"); }}
                   tooltip="Funded CEOs"
+                  className="rounded-lg transition-all duration-200"
                 >
                   <Users className="h-4 w-4" />
-                  <span>Funded CEOs</span>
+                  <span className="font-medium">Funded CEOs</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
 
-        <SidebarSeparator />
+        <SidebarSeparator className="opacity-20" />
 
         <SidebarGroup>
-          <SidebarGroupLabel>Navigation</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-[10px] uppercase tracking-[0.15em] text-sidebar-foreground/40 font-semibold px-3">Navigation</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {navItems.map((item) => (
@@ -87,9 +89,10 @@ export function AppSidebar({ activeView, setActiveView, activeTab, setActiveTab,
                     isActive={activeTab === item.id}
                     onClick={() => setActiveTab(item.id)}
                     tooltip={item.label}
+                    className="rounded-lg transition-all duration-200"
                   >
                     <item.icon className="h-4 w-4" />
-                    <span>{item.label}</span>
+                    <span className="font-medium">{item.label}</span>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
@@ -98,8 +101,8 @@ export function AppSidebar({ activeView, setActiveView, activeTab, setActiveTab,
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="p-3 space-y-2">
-        <Button variant="outline" size="sm" className="w-full justify-start gap-2 text-xs" onClick={onExport}>
+      <SidebarFooter className="p-4">
+        <Button variant="outline" size="sm" className="w-full justify-start gap-2 text-xs border-sidebar-border text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent rounded-lg" onClick={onExport}>
           <Download className="h-3.5 w-3.5" />
           Export CSV
         </Button>
