@@ -80,7 +80,7 @@ export default function Dashboard() {
     return [];
   }, [activeView]);
 
-  const currentLeads = activeView === "Jobs" ? jobs : ceos;
+  const currentLeads = activeView === "Jobs" ? jobs : activeView === "CEOs" ? [] as Lead[] : ceos;
   const filteredLeads = currentLeads.filter(
     (l) =>
       l.entity.toLowerCase().includes(search.toLowerCase()) ||
