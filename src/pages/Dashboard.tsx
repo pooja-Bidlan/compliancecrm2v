@@ -59,6 +59,7 @@ let _icaiPractitioners: ICAIPractitioner[] | null = null;
 let _complianceHeads: ComplianceHeadRecord[] | null = null;
 let _csJobRecords: CSJobRecord[] | null = null;
 let _cfoRecords: CFORecord[] | null = null;
+let _usaCompliance: USAComplianceRecord[] | null = null;
 
 function getSaasCompanies() { if (!_saasCompanies) _saasCompanies = generateEnrichedCompanies("SaaS"); return _saasCompanies; }
 function getAiCompanies() { if (!_aiCompanies) _aiCompanies = generateEnrichedCompanies("AI"); return _aiCompanies; }
