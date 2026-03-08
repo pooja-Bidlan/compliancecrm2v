@@ -169,6 +169,7 @@ export default function Dashboard() {
       ComplianceHead: () => downloadCSV(convertGenericCSV(complianceHeads, COMPLIANCE_HEAD_COLUMNS as any), "Compliance_Heads_Full.csv"),
       CSJob: () => downloadCSV(convertGenericCSV(csJobRecords, CS_JOB_COLUMNS as any), "CS_In_Service_Full.csv"),
       CFO: () => downloadCSV(convertGenericCSV(cfoRecords, CFO_COLUMNS as any), "CFOs_Full.csv"),
+      USACompliance: () => downloadCSV(convertGenericCSV(usaCompliance, USA_COMPLIANCE_COLUMNS as any), "USA_CCOs_Listed_Full.csv"),
     };
     if (exportMap[activeView]) { exportMap[activeView](); return; }
     if (isEnrichedMode) { downloadCSV(convertEnrichedToCSV(enrichedCompanies, ENRICHED_COLUMNS), `${activeView}_Companies_Full.csv`); return; }
