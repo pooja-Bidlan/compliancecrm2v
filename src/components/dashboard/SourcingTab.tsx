@@ -17,15 +17,29 @@ const PAGE_SIZE = 60;
 
 export function SourcingTab({ leads, activeView, onOutreach }: SourcingTabProps) {
   const [page, setPage] = useState(0);
+  const [search, setSearch] = useState("");
+  const debouncedSearch = useDebouncedValue(search, 250);
 
-  const totalPages = Math.ceil(leads.length / PAGE_SIZE);
+  const filtered = useMemo(() => {
+    if (!debouncedSearch) return leads;
+    const q = debouncedSearch.toLowerCase();
+    return leads.filter(
+      (l) =>
+        l.entity.toLowerCase().includes(q) ||
+        l.contact.toLowerCase().includes(q) ||
+        l.location.toLowerCase().includes(q) ||
+        l.category.toLowerCase().includes(q)
+    );
+  }, [leads, debouncedSearch]);
+
+  const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
   const pageData = useMemo(
-    () => leads.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE),
-    [leads, page]
+    () => filtered.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE),
+    [filtered, page]
   );
 
-  // Reset page when leads change (e.g. search filter)
-  const prevLen = useMemo(() => leads.length, [leads]);
+  // Reset page when filtered results change
+  const prevLen = useMemo(() => filtered.length, [filtered]);
   if (page > 0 && page >= Math.ceil(prevLen / PAGE_SIZE)) {
     setPage(0);
   }
