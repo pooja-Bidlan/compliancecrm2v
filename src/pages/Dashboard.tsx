@@ -180,6 +180,9 @@ export default function Dashboard() {
     } else if (activeView === "CEOs") {
       const csv = convertGenericCSV(ceoCompanies, CEO_COLUMNS as { key: string; label: string }[]);
       downloadCSV(csv, `Funded_CEOs_Full.csv`);
+    } else if (activeView === "MarketIntel") {
+      const csv = convertGenericCSV(marketIntel, MARKET_INTEL_COLUMNS as { key: string; label: string }[]);
+      downloadCSV(csv, `Market_Intelligence_Full.csv`);
     } else if (isEnrichedMode) {
       const csv = convertEnrichedToCSV(enrichedCompanies, ENRICHED_COLUMNS);
       downloadCSV(csv, `${activeView}_Companies_Full.csv`);
