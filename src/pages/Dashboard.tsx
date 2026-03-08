@@ -343,7 +343,10 @@ export default function Dashboard() {
               {activeTab === "Sourcing" && activeView === "LawyersDelhi" && (
                 <LawyersTable companies={lawyersDelhi} variant="delhi-ncr" />
               )}
-              {activeTab === "Sourcing" && isEnrichedMode && activeView !== "BFSI" && activeView !== "Coaching" && activeView !== "CEOs" && activeView !== "MarketIntel" && activeView !== "Lawyers" && activeView !== "LawyersDelhi" && (
+              {activeTab === "Sourcing" && activeView === "Jobs" && (
+                <RemoteJobsTable jobs={remoteJobs} />
+              )}
+              {activeTab === "Sourcing" && isEnrichedMode && activeView !== "BFSI" && activeView !== "Coaching" && activeView !== "CEOs" && activeView !== "MarketIntel" && activeView !== "Lawyers" && activeView !== "LawyersDelhi" && activeView !== "Jobs" && (
                 <EnrichedTable companies={enrichedCompanies} type={activeView as "SaaS" | "AI"} />
               )}
               {activeTab === "Sourcing" && !isEnrichedMode && (
