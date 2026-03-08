@@ -1,9 +1,10 @@
 import { useState, useMemo } from "react";
-import { MapPin, Send, Globe, Linkedin, ChevronLeft, ChevronRight, Search } from "lucide-react";
+import { MapPin, Send, Globe, Linkedin, ChevronLeft, ChevronRight, Search, X } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 import type { Lead } from "@/lib/mock-data";
 
@@ -14,23 +15,39 @@ interface SourcingTabProps {
 }
 
 const PAGE_SIZE = 60;
+const ALL = "__all__";
 
 export function SourcingTab({ leads, activeView, onOutreach }: SourcingTabProps) {
   const [page, setPage] = useState(0);
   const [search, setSearch] = useState("");
+  const [locationFilter, setLocationFilter] = useState(ALL);
+  const [categoryFilter, setCategoryFilter] = useState(ALL);
   const debouncedSearch = useDebouncedValue(search, 250);
 
+  // Derive unique locations & categories from full dataset
+  const locations = useMemo(() => [...new Set(leads.map((l) => l.location))].sort(), [leads]);
+  const categories = useMemo(() => [...new Set(leads.map((l) => l.category))].sort(), [leads]);
+
   const filtered = useMemo(() => {
-    if (!debouncedSearch) return leads;
-    const q = debouncedSearch.toLowerCase();
-    return leads.filter(
-      (l) =>
-        l.entity.toLowerCase().includes(q) ||
-        l.contact.toLowerCase().includes(q) ||
-        l.location.toLowerCase().includes(q) ||
-        l.category.toLowerCase().includes(q)
-    );
-  }, [leads, debouncedSearch]);
+    let result = leads;
+    if (locationFilter !== ALL) {
+      result = result.filter((l) => l.location === locationFilter);
+    }
+    if (categoryFilter !== ALL) {
+      result = result.filter((l) => l.category === categoryFilter);
+    }
+    if (debouncedSearch) {
+      const q = debouncedSearch.toLowerCase();
+      result = result.filter(
+        (l) =>
+          l.entity.toLowerCase().includes(q) ||
+          l.contact.toLowerCase().includes(q) ||
+          l.location.toLowerCase().includes(q) ||
+          l.category.toLowerCase().includes(q)
+      );
+    }
+    return result;
+  }, [leads, debouncedSearch, locationFilter, categoryFilter]);
 
   const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
   const pageData = useMemo(
@@ -44,10 +61,12 @@ export function SourcingTab({ leads, activeView, onOutreach }: SourcingTabProps)
     setPage(0);
   }
 
+  const hasActiveFilters = locationFilter !== ALL || categoryFilter !== ALL || search !== "";
+
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-3 flex-wrap">
-        <div className="relative flex-1 min-w-[200px] max-w-sm">
+        <div className="relative flex-1 min-w-[180px] max-w-xs">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
             placeholder={`Search ${activeView === "Jobs" ? "jobs" : "CEOs"}…`}
@@ -56,14 +75,46 @@ export function SourcingTab({ leads, activeView, onOutreach }: SourcingTabProps)
             className="pl-9 rounded-lg"
           />
         </div>
-        <Badge variant="secondary" className="rounded-full text-xs px-3 py-1 font-semibold">
+
+        <Select value={locationFilter} onValueChange={setLocationFilter}>
+          <SelectTrigger className="w-[160px] rounded-lg text-xs h-10">
+            <MapPin className="h-3.5 w-3.5 mr-1 text-muted-foreground shrink-0" />
+            <SelectValue placeholder="Location" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value={ALL}>All Locations</SelectItem>
+            {locations.map((loc) => (
+              <SelectItem key={loc} value={loc}>{loc}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+
+        <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+          <SelectTrigger className="w-[220px] rounded-lg text-xs h-10">
+            <SelectValue placeholder="Category" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value={ALL}>All Categories</SelectItem>
+            {categories.map((cat) => (
+              <SelectItem key={cat} value={cat}>{cat}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+
+        {hasActiveFilters && (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => { setSearch(""); setLocationFilter(ALL); setCategoryFilter(ALL); }}
+            className="text-xs gap-1 text-muted-foreground"
+          >
+            <X className="h-3.5 w-3.5" /> Clear
+          </Button>
+        )}
+
+        <Badge variant="secondary" className="rounded-full text-xs px-3 py-1 font-semibold ml-auto">
           {filtered.length.toLocaleString()} {activeView === "Jobs" ? "jobs" : "CEOs"}
         </Badge>
-        {totalPages > 1 && (
-          <p className="text-xs text-muted-foreground ml-auto">
-            Page {page + 1} of {totalPages}
-          </p>
-        )}
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
