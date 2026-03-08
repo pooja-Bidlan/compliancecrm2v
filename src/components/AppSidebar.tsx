@@ -15,7 +15,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
-export type ViewMode = "Jobs" | "CEOs" | "SaaS" | "AI" | "BFSI" | "Coaching" | "MarketIntel" | "Lawyers" | "LawyersDelhi" | "MCA" | "ICSI" | "ICAI" | "ComplianceHead" | "CSJob" | "CFO";
+export type ViewMode = "Jobs" | "CEOs" | "SaaS" | "AI" | "BFSI" | "Coaching" | "MarketIntel" | "Lawyers" | "LawyersDelhi" | "MCA" | "ICSI" | "ICAI" | "ComplianceHead" | "CSJob" | "CFO" | "USACompliance";
 
 interface AppSidebarProps {
   activeView: ViewMode;
