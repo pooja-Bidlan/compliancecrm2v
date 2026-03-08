@@ -1,8 +1,10 @@
 import { useState, useMemo } from "react";
-import { MapPin, Send, Globe, Linkedin, ChevronLeft, ChevronRight } from "lucide-react";
+import { MapPin, Send, Globe, Linkedin, ChevronLeft, ChevronRight, Search } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 import type { Lead } from "@/lib/mock-data";
 
 interface SourcingTabProps {
@@ -15,27 +17,50 @@ const PAGE_SIZE = 60;
 
 export function SourcingTab({ leads, activeView, onOutreach }: SourcingTabProps) {
   const [page, setPage] = useState(0);
+  const [search, setSearch] = useState("");
+  const debouncedSearch = useDebouncedValue(search, 250);
 
-  const totalPages = Math.ceil(leads.length / PAGE_SIZE);
+  const filtered = useMemo(() => {
+    if (!debouncedSearch) return leads;
+    const q = debouncedSearch.toLowerCase();
+    return leads.filter(
+      (l) =>
+        l.entity.toLowerCase().includes(q) ||
+        l.contact.toLowerCase().includes(q) ||
+        l.location.toLowerCase().includes(q) ||
+        l.category.toLowerCase().includes(q)
+    );
+  }, [leads, debouncedSearch]);
+
+  const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
   const pageData = useMemo(
-    () => leads.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE),
-    [leads, page]
+    () => filtered.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE),
+    [filtered, page]
   );
 
-  // Reset page when leads change (e.g. search filter)
-  const prevLen = useMemo(() => leads.length, [leads]);
+  // Reset page when filtered results change
+  const prevLen = useMemo(() => filtered.length, [filtered]);
   if (page > 0 && page >= Math.ceil(prevLen / PAGE_SIZE)) {
     setPage(0);
   }
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center gap-3 flex-wrap">
+        <div className="relative flex-1 min-w-[200px] max-w-sm">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            placeholder={`Search ${activeView === "Jobs" ? "jobs" : "CEOs"}…`}
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="pl-9 rounded-lg"
+          />
+        </div>
         <Badge variant="secondary" className="rounded-full text-xs px-3 py-1 font-semibold">
-          {leads.length.toLocaleString()} {activeView === "Jobs" ? "jobs" : "CEOs"}
+          {filtered.length.toLocaleString()} {activeView === "Jobs" ? "jobs" : "CEOs"}
         </Badge>
         {totalPages > 1 && (
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs text-muted-foreground ml-auto">
             Page {page + 1} of {totalPages}
           </p>
         )}
@@ -103,7 +128,7 @@ export function SourcingTab({ leads, activeView, onOutreach }: SourcingTabProps)
       {totalPages > 1 && (
         <div className="flex items-center justify-between pt-2">
           <p className="text-xs text-muted-foreground">
-            Showing {(page * PAGE_SIZE + 1).toLocaleString()}–{Math.min((page + 1) * PAGE_SIZE, leads.length).toLocaleString()} of {leads.length.toLocaleString()}
+            Showing {(page * PAGE_SIZE + 1).toLocaleString()}–{Math.min((page + 1) * PAGE_SIZE, filtered.length).toLocaleString()} of {filtered.length.toLocaleString()}
           </p>
           <div className="flex items-center gap-2">
             <Button
