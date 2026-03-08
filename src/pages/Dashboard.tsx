@@ -205,6 +205,12 @@ export default function Dashboard() {
     } else if (activeView === "MarketIntel") {
       const csv = convertGenericCSV(marketIntel, MARKET_INTEL_COLUMNS as { key: string; label: string }[]);
       downloadCSV(csv, `Market_Intelligence_Full.csv`);
+    } else if (activeView === "Lawyers") {
+      const csv = convertGenericCSV(lawyersPanIndia, LAWYER_COLUMNS as { key: string; label: string }[]);
+      downloadCSV(csv, `Lawyers_PanIndia_Full.csv`);
+    } else if (activeView === "LawyersDelhi") {
+      const csv = convertGenericCSV(lawyersDelhi, LAWYER_COLUMNS as { key: string; label: string }[]);
+      downloadCSV(csv, `Lawyers_DelhiNCR_Full.csv`);
     } else if (isEnrichedMode) {
       const csv = convertEnrichedToCSV(enrichedCompanies, ENRICHED_COLUMNS);
       downloadCSV(csv, `${activeView}_Companies_Full.csv`);
