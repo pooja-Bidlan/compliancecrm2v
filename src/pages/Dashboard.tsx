@@ -20,6 +20,7 @@ import { generateBFSICompanies, BFSI_COLUMNS, type BFSICompany } from "@/lib/bfs
 import { generateCoachingCompanies, COACHING_COLUMNS, type CoachingCompany } from "@/lib/coaching-data";
 import { generateFundedCEOs, CEO_COLUMNS, type FundedCEO } from "@/lib/ceo-data";
 import { generateMarketIntel, MARKET_INTEL_COLUMNS, type MarketIntelProspect } from "@/lib/market-intel-data";
+import { generateLawyersPanIndia, generateLawyersDelhiNCR, LAWYER_COLUMNS, type LawyerProspect } from "@/lib/lawyers-data";
 import { convertToCSV, convertEnrichedToCSV, downloadCSV, type ExportRow } from "@/lib/csv-utils";
 import { useOutreachLogs } from "@/hooks/useOutreachLogs";
 import { useUserProfile } from "@/hooks/useUserProfile";
