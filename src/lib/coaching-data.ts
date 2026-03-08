@@ -32,26 +32,7 @@ const coachingCategories = [
 ];
 
 const countries = [
-  { name: "India", cities: ["Delhi", "Mumbai", "Bangalore", "Hyderabad", "Chennai", "Pune", "Kolkata", "Jaipur", "Lucknow", "Kota", "Patna", "Chandigarh", "Ahmedabad", "Noida", "Gurugram", "Bhopal", "Indore"], region: "Asia Pacific" },
-  { name: "United States", cities: ["New York", "San Francisco", "Boston", "Chicago", "Los Angeles", "Austin", "Seattle", "Denver", "Atlanta", "Houston"], region: "North America" },
-  { name: "United Kingdom", cities: ["London", "Manchester", "Oxford", "Cambridge", "Edinburgh", "Birmingham"], region: "Europe" },
-  { name: "Australia", cities: ["Sydney", "Melbourne", "Brisbane", "Perth"], region: "Asia Pacific" },
-  { name: "Canada", cities: ["Toronto", "Vancouver", "Montreal", "Ottawa"], region: "North America" },
-  { name: "Singapore", cities: ["Singapore"], region: "Asia Pacific" },
-  { name: "UAE", cities: ["Dubai", "Abu Dhabi", "Sharjah"], region: "Middle East" },
-  { name: "Germany", cities: ["Berlin", "Munich", "Hamburg", "Frankfurt"], region: "Europe" },
-  { name: "China", cities: ["Beijing", "Shanghai", "Shenzhen", "Guangzhou"], region: "Asia Pacific" },
-  { name: "Japan", cities: ["Tokyo", "Osaka", "Kyoto"], region: "Asia Pacific" },
-  { name: "South Korea", cities: ["Seoul", "Busan"], region: "Asia Pacific" },
-  { name: "Malaysia", cities: ["Kuala Lumpur", "Penang"], region: "Asia Pacific" },
-  { name: "Philippines", cities: ["Manila", "Cebu"], region: "Asia Pacific" },
-  { name: "South Africa", cities: ["Johannesburg", "Cape Town"], region: "Africa" },
-  { name: "Nigeria", cities: ["Lagos", "Abuja"], region: "Africa" },
-  { name: "Brazil", cities: ["São Paulo", "Rio de Janeiro"], region: "South America" },
-  { name: "France", cities: ["Paris", "Lyon"], region: "Europe" },
-  { name: "Netherlands", cities: ["Amsterdam"], region: "Europe" },
-  { name: "Sweden", cities: ["Stockholm"], region: "Europe" },
-  { name: "Israel", cities: ["Tel Aviv"], region: "Middle East" },
+  { name: "India", cities: ["Delhi", "Mumbai", "Bangalore", "Hyderabad", "Chennai", "Pune", "Kolkata", "Jaipur", "Lucknow", "Kota", "Patna", "Chandigarh", "Ahmedabad", "Noida", "Gurugram", "Bhopal", "Indore", "Surat", "Nagpur", "Vadodara", "Visakhapatnam", "Coimbatore", "Thiruvananthapuram", "Ranchi", "Bhubaneswar", "Guwahati", "Dehradun", "Mysuru", "Mangalore", "Rajkot"], region: "India" },
 ];
 
 const firstNames = [
