@@ -157,7 +157,7 @@ function slugify(name: string): string {
 const deliveryModes = ["Online Only", "Offline Only", "Hybrid", "Online + App", "Classroom + Online"];
 
 export function generateCoachingCompanies(): CoachingCompany[] {
-  const count = 30000;
+  const count = 40000;
   const rand = seededRandom(54321);
   const results: CoachingCompany[] = [];
 
