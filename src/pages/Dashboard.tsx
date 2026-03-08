@@ -31,6 +31,7 @@ let _aiCompanies: EnrichedCompany[] | null = null;
 let _bfsiCompanies: BFSICompany[] | null = null;
 let _coachingCompanies: CoachingCompany[] | null = null;
 let _ceoCompanies: FundedCEO[] | null = null;
+let _marketIntel: MarketIntelProspect[] | null = null;
 function getSaasCompanies() {
   if (!_saasCompanies) _saasCompanies = generateEnrichedCompanies("SaaS");
   return _saasCompanies;
