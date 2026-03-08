@@ -400,7 +400,16 @@ export default function Dashboard() {
               {activeTab === "Sourcing" && activeView === "Jobs" && (
                 <RemoteJobsTable jobs={remoteJobs} />
               )}
-              {activeTab === "Sourcing" && isEnrichedMode && activeView !== "BFSI" && activeView !== "Coaching" && activeView !== "CEOs" && activeView !== "MarketIntel" && activeView !== "Lawyers" && activeView !== "LawyersDelhi" && activeView !== "Jobs" && (
+              {activeTab === "Sourcing" && activeView === "MCA" && (
+                <MCATable companies={mcaCompanies} />
+              )}
+              {activeTab === "Sourcing" && activeView === "ICSI" && (
+                <ICSITable practitioners={icsiPractitioners} />
+              )}
+              {activeTab === "Sourcing" && activeView === "ICAI" && (
+                <ICAITable practitioners={icaiPractitioners} />
+              )}
+              {activeTab === "Sourcing" && isEnrichedMode && activeView !== "BFSI" && activeView !== "Coaching" && activeView !== "CEOs" && activeView !== "MarketIntel" && activeView !== "Lawyers" && activeView !== "LawyersDelhi" && activeView !== "Jobs" && activeView !== "MCA" && activeView !== "ICSI" && activeView !== "ICAI" && (
                 <EnrichedTable companies={enrichedCompanies} type={activeView as "SaaS" | "AI"} />
               )}
               {activeTab === "Sourcing" && !isEnrichedMode && (
