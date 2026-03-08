@@ -87,6 +87,11 @@ export default function Dashboard() {
     return [];
   }, [activeView]);
 
+  const marketIntel = useMemo(() => {
+    if (activeView === "MarketIntel") return getMarketIntel();
+    return [];
+  }, [activeView]);
+
   const currentLeads = activeView === "Jobs" ? jobs : activeView === "CEOs" ? [] as Lead[] : ceos;
   const filteredLeads = currentLeads.filter(
     (l) =>
