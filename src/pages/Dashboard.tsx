@@ -225,6 +225,8 @@ export default function Dashboard() {
         ? "80,000 India BFSI companies — Banks, FinTechs, NBFCs, SFBs, Insurance — enriched with 26 columns"
         : activeView === "CEOs"
         ? "20,000 funded CEOs globally — enriched with 26 columns including company native country"
+        : activeView === "MarketIntel"
+        ? "5,000 prospects — new appointments, board & director changes — enriched with 26 columns"
         : "40,000 coaching institutes in India — enriched with 26 columns"
       : activeView === "Jobs" ? "Browse and apply to remote compliance roles" : "Discover funded CEOs for fractional engagements",
     Archive: "Track all your outreach activity in one place",
