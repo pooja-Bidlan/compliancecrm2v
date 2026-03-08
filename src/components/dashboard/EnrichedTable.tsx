@@ -1,4 +1,5 @@
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, memo } from "react";
+import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -20,9 +21,11 @@ export function EnrichedTable({ companies, type }: EnrichedTableProps) {
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [page, setPage] = useState(0);
 
+  const debouncedSearch = useDebouncedValue(search, 200);
+
   const filtered = useMemo(() => {
-    if (!search.trim()) return companies;
-    const q = search.toLowerCase();
+    if (!debouncedSearch.trim()) return companies;
+    const q = debouncedSearch.toLowerCase();
     return companies.filter(
       (c) =>
         c.companyName.toLowerCase().includes(q) ||
@@ -31,7 +34,7 @@ export function EnrichedTable({ companies, type }: EnrichedTableProps) {
         c.country.toLowerCase().includes(q) ||
         c.subSector.toLowerCase().includes(q)
     );
-  }, [companies, search]);
+  }, [companies, debouncedSearch]);
 
   const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
   const pageData = useMemo(

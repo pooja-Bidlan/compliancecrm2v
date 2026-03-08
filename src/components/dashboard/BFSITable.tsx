@@ -1,5 +1,6 @@
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, memo } from "react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -36,13 +37,15 @@ export function BFSITable({ companies }: BFSITableProps) {
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [page, setPage] = useState(0);
 
+  const debouncedSearch = useDebouncedValue(search, 200);
+
   const filtered = useMemo(() => {
     let result = companies;
     if (categoryFilter !== "All") {
       result = result.filter((c) => c.category === categoryFilter);
     }
-    if (search.trim()) {
-      const q = search.toLowerCase();
+    if (debouncedSearch.trim()) {
+      const q = debouncedSearch.toLowerCase();
       result = result.filter(
         (c) =>
           c.companyName.toLowerCase().includes(q) ||
@@ -56,7 +59,7 @@ export function BFSITable({ companies }: BFSITableProps) {
       );
     }
     return result;
-  }, [companies, search, categoryFilter]);
+  }, [companies, debouncedSearch, categoryFilter]);
 
   const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
   const pageData = useMemo(

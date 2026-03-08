@@ -1,4 +1,4 @@
-import { useState, useMemo, lazy, Suspense } from "react";
+import { useState, useMemo, useTransition } from "react";
 import { SidebarProvider, SidebarTrigger, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar, type ViewMode } from "@/components/AppSidebar";
 import { SourcingTab } from "@/components/dashboard/SourcingTab";
