@@ -191,6 +191,7 @@ export default function Dashboard() {
       ? activeView === "SaaS" ? "SaaS Companies Database"
         : activeView === "AI" ? "AI Companies Database"
         : activeView === "BFSI" ? "BFSI Companies Database"
+        : activeView === "CEOs" ? "Funded CEOs Database"
         : "Coaching Institutes Database"
       : activeView === "Jobs" ? "Remote FCCO / FCO Hunt" : "Regulatory CEO Outreach",
     Archive: "Master Archive",
@@ -206,6 +207,8 @@ export default function Dashboard() {
         ? "5,000 global AI companies with 50+ employees — enriched with 26 data columns"
         : activeView === "BFSI"
         ? "80,000 India BFSI companies — Banks, FinTechs, NBFCs, SFBs, Insurance — enriched with 26 columns"
+        : activeView === "CEOs"
+        ? "20,000 funded CEOs globally — enriched with 26 columns including company native country"
         : "40,000 coaching institutes in India — enriched with 26 columns"
       : activeView === "Jobs" ? "Browse and apply to remote compliance roles" : "Discover funded CEOs for fractional engagements",
     Archive: "Track all your outreach activity in one place",
