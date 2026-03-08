@@ -12,6 +12,9 @@ import { CeoTable } from "@/components/dashboard/CeoTable";
 import { MarketIntelTable } from "@/components/dashboard/MarketIntelTable";
 import { LawyersTable } from "@/components/dashboard/LawyersTable";
 import { RemoteJobsTable } from "@/components/dashboard/RemoteJobsTable";
+import { MCATable } from "@/components/dashboard/MCATable";
+import { ICSITable } from "@/components/dashboard/ICSITable";
+import { ICAITable } from "@/components/dashboard/ICAITable";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Search } from "lucide-react";
@@ -23,6 +26,9 @@ import { generateFundedCEOs, CEO_COLUMNS, type FundedCEO } from "@/lib/ceo-data"
 import { generateMarketIntel, MARKET_INTEL_COLUMNS, type MarketIntelProspect } from "@/lib/market-intel-data";
 import { generateLawyersPanIndia, generateLawyersDelhiNCR, LAWYER_COLUMNS, type LawyerProspect } from "@/lib/lawyers-data";
 import { generateRemoteJobs, REMOTE_JOB_COLUMNS, type RemoteJob } from "@/lib/remote-jobs-data";
+import { generateMCACompanies, MCA_COLUMNS, type MCACompany } from "@/lib/mca-data";
+import { generateICSIPractitioners, ICSI_COLUMNS, type ICSIPractitioner } from "@/lib/icsi-data";
+import { generateICAIPractitioners, ICAI_COLUMNS, type ICAIPractitioner } from "@/lib/icai-data";
 import { convertToCSV, convertEnrichedToCSV, downloadCSV, type ExportRow } from "@/lib/csv-utils";
 import { useOutreachLogs } from "@/hooks/useOutreachLogs";
 import { useUserProfile } from "@/hooks/useUserProfile";
@@ -39,6 +45,9 @@ let _marketIntel: MarketIntelProspect[] | null = null;
 let _lawyersPanIndia: LawyerProspect[] | null = null;
 let _lawyersDelhi: LawyerProspect[] | null = null;
 let _remoteJobs: RemoteJob[] | null = null;
+let _mcaCompanies: MCACompany[] | null = null;
+let _icsiPractitioners: ICSIPractitioner[] | null = null;
+let _icaiPractitioners: ICAIPractitioner[] | null = null;
 function getSaasCompanies() {
   if (!_saasCompanies) _saasCompanies = generateEnrichedCompanies("SaaS");
   return _saasCompanies;
@@ -75,6 +84,18 @@ function getRemoteJobs() {
   if (!_remoteJobs) _remoteJobs = generateRemoteJobs();
   return _remoteJobs;
 }
+function getMCACompanies() {
+  if (!_mcaCompanies) _mcaCompanies = generateMCACompanies();
+  return _mcaCompanies;
+}
+function getICSIPractitioners() {
+  if (!_icsiPractitioners) _icsiPractitioners = generateICSIPractitioners();
+  return _icsiPractitioners;
+}
+function getICAIPractitioners() {
+  if (!_icaiPractitioners) _icaiPractitioners = generateICAIPractitioners();
+  return _icaiPractitioners;
+}
 
 export default function Dashboard() {
   const [activeView, setActiveView] = useState<ViewMode>("Jobs");
@@ -83,7 +104,7 @@ export default function Dashboard() {
   const { logs, addLog, updateLog } = useOutreachLogs();
   const { profile, updateProfile } = useUserProfile();
 
-  const isEnrichedMode = activeView === "SaaS" || activeView === "AI" || activeView === "BFSI" || activeView === "Coaching" || activeView === "CEOs" || activeView === "MarketIntel" || activeView === "Lawyers" || activeView === "LawyersDelhi" || activeView === "Jobs";
+  const isEnrichedMode = activeView === "SaaS" || activeView === "AI" || activeView === "BFSI" || activeView === "Coaching" || activeView === "CEOs" || activeView === "MarketIntel" || activeView === "Lawyers" || activeView === "LawyersDelhi" || activeView === "Jobs" || activeView === "MCA" || activeView === "ICSI" || activeView === "ICAI";
 
   const enrichedCompanies = useMemo(() => {
     if (activeView === "SaaS") return getSaasCompanies();
@@ -126,7 +147,22 @@ export default function Dashboard() {
     return [];
   }, [activeView]);
 
-  const currentLeads = activeView === "Jobs" ? jobs : activeView === "CEOs" ? [] as Lead[] : ceos;
+  const mcaCompanies = useMemo(() => {
+    if (activeView === "MCA") return getMCACompanies();
+    return [];
+  }, [activeView]);
+
+  const icsiPractitioners = useMemo(() => {
+    if (activeView === "ICSI") return getICSIPractitioners();
+    return [];
+  }, [activeView]);
+
+  const icaiPractitioners = useMemo(() => {
+    if (activeView === "ICAI") return getICAIPractitioners();
+    return [];
+  }, [activeView]);
+
+  const currentLeads = activeView === "Jobs" ? [] as Lead[] : activeView === "CEOs" ? [] as Lead[] : ceos;
   const filteredLeads = currentLeads.filter(
     (l) =>
       l.entity.toLowerCase().includes(search.toLowerCase()) ||
@@ -226,11 +262,20 @@ export default function Dashboard() {
     } else if (activeView === "LawyersDelhi") {
       const csv = convertGenericCSV(lawyersDelhi, LAWYER_COLUMNS as { key: string; label: string }[]);
       downloadCSV(csv, `Lawyers_DelhiNCR_Full.csv`);
+    } else if (activeView === "MCA") {
+      const csv = convertGenericCSV(mcaCompanies, MCA_COLUMNS as { key: string; label: string }[]);
+      downloadCSV(csv, `MCA_Companies_ForeignDir_Full.csv`);
+    } else if (activeView === "ICSI") {
+      const csv = convertGenericCSV(icsiPractitioners, ICSI_COLUMNS as { key: string; label: string }[]);
+      downloadCSV(csv, `ICSI_Practitioners_Full.csv`);
+    } else if (activeView === "ICAI") {
+      const csv = convertGenericCSV(icaiPractitioners, ICAI_COLUMNS as { key: string; label: string }[]);
+      downloadCSV(csv, `ICAI_Practitioners_Full.csv`);
     } else if (isEnrichedMode) {
       const csv = convertEnrichedToCSV(enrichedCompanies, ENRICHED_COLUMNS);
       downloadCSV(csv, `${activeView}_Companies_Full.csv`);
     } else {
-      const csv = convertToCSV(repository, activeView === "Jobs" ? "Job" : "CEO");
+      const csv = convertToCSV(repository, "CEO");
       downloadCSV(csv, `${activeView}_Archive.csv`);
     }
   };
@@ -254,6 +299,9 @@ export default function Dashboard() {
         : activeView === "MarketIntel" ? "Market Intelligence"
         : activeView === "Lawyers" ? "Lawyers & Advocates (Pan-India)"
         : activeView === "LawyersDelhi" ? "Lawyers & Advocates (Delhi NCR)"
+        : activeView === "MCA" ? "MCA Listed Companies (Foreign Directors)"
+        : activeView === "ICSI" ? "ICSI — Company Secretaries in Practice"
+        : activeView === "ICAI" ? "ICAI — Chartered Accountants in Practice"
         : "Coaching Institutes Database"
       : "Regulatory CEO Outreach",
     Archive: "Master Archive",
@@ -279,6 +327,12 @@ export default function Dashboard() {
         ? "100,000 practicing lawyers & advocate firms across India (excl. Delhi NCR) — sell LegalTech API access"
         : activeView === "LawyersDelhi"
         ? "80,000 practicing lawyers & advocate firms in Delhi NCR — sell LegalTech API access"
+        : activeView === "MCA"
+        ? "40,000 MCA listed companies with foreign directors — enriched with 26 columns"
+        : activeView === "ICSI"
+        ? "20,000 Company Secretaries in practice across India — firm names, emails, enriched with 25 columns"
+        : activeView === "ICAI"
+        ? "20,000 Chartered Accountants in practice across India — firm names, emails, enriched with 25 columns"
         : "40,000 coaching institutes in India — enriched with 26 columns"
       : "Discover funded CEOs for fractional engagements",
     Archive: "Track all your outreach activity in one place",
@@ -346,7 +400,16 @@ export default function Dashboard() {
               {activeTab === "Sourcing" && activeView === "Jobs" && (
                 <RemoteJobsTable jobs={remoteJobs} />
               )}
-              {activeTab === "Sourcing" && isEnrichedMode && activeView !== "BFSI" && activeView !== "Coaching" && activeView !== "CEOs" && activeView !== "MarketIntel" && activeView !== "Lawyers" && activeView !== "LawyersDelhi" && activeView !== "Jobs" && (
+              {activeTab === "Sourcing" && activeView === "MCA" && (
+                <MCATable companies={mcaCompanies} />
+              )}
+              {activeTab === "Sourcing" && activeView === "ICSI" && (
+                <ICSITable practitioners={icsiPractitioners} />
+              )}
+              {activeTab === "Sourcing" && activeView === "ICAI" && (
+                <ICAITable practitioners={icaiPractitioners} />
+              )}
+              {activeTab === "Sourcing" && isEnrichedMode && activeView !== "BFSI" && activeView !== "Coaching" && activeView !== "CEOs" && activeView !== "MarketIntel" && activeView !== "Lawyers" && activeView !== "LawyersDelhi" && activeView !== "Jobs" && activeView !== "MCA" && activeView !== "ICSI" && activeView !== "ICAI" && (
                 <EnrichedTable companies={enrichedCompanies} type={activeView as "SaaS" | "AI"} />
               )}
               {activeTab === "Sourcing" && !isEnrichedMode && (
