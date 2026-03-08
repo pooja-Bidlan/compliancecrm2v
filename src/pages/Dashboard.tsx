@@ -257,6 +257,10 @@ export default function Dashboard() {
         ? "20,000 funded CEOs globally — enriched with 26 columns including company native country"
         : activeView === "MarketIntel"
         ? "5,000 prospects — new appointments, board & director changes — enriched with 26 columns"
+        : activeView === "Lawyers"
+        ? "100,000 practicing lawyers & advocate firms across India (excl. Delhi NCR) — sell LegalTech API access"
+        : activeView === "LawyersDelhi"
+        ? "80,000 practicing lawyers & advocate firms in Delhi NCR — sell LegalTech API access"
         : "40,000 coaching institutes in India — enriched with 26 columns"
       : activeView === "Jobs" ? "Browse and apply to remote compliance roles" : "Discover funded CEOs for fractional engagements",
     Archive: "Track all your outreach activity in one place",
