@@ -15,7 +15,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
-export type ViewMode = "Jobs" | "CEOs" | "SaaS" | "AI";
+export type ViewMode = "Jobs" | "CEOs" | "SaaS" | "AI" | "BFSI";
 
 interface AppSidebarProps {
   activeView: ViewMode;
