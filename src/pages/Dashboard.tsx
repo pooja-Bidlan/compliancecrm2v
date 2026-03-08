@@ -51,6 +51,11 @@ export default function Dashboard() {
     return [];
   }, [activeView]);
 
+  const bfsiCompanies = useMemo(() => {
+    if (activeView === "BFSI") return getBfsiCompanies();
+    return [];
+  }, [activeView]);
+
   const currentLeads = activeView === "Jobs" ? jobs : ceos;
   const filteredLeads = currentLeads.filter(
     (l) =>
