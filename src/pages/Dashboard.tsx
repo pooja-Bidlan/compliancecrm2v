@@ -38,6 +38,7 @@ let _ceoCompanies: FundedCEO[] | null = null;
 let _marketIntel: MarketIntelProspect[] | null = null;
 let _lawyersPanIndia: LawyerProspect[] | null = null;
 let _lawyersDelhi: LawyerProspect[] | null = null;
+let _remoteJobs: RemoteJob[] | null = null;
 function getSaasCompanies() {
   if (!_saasCompanies) _saasCompanies = generateEnrichedCompanies("SaaS");
   return _saasCompanies;
