@@ -261,7 +261,10 @@ export default function Dashboard() {
               {activeTab === "Sourcing" && activeView === "Coaching" && (
                 <CoachingTable companies={coachingCompanies} />
               )}
-              {activeTab === "Sourcing" && isEnrichedMode && activeView !== "BFSI" && activeView !== "Coaching" && (
+              {activeTab === "Sourcing" && activeView === "CEOs" && (
+                <CeoTable companies={ceoCompanies} />
+              )}
+              {activeTab === "Sourcing" && isEnrichedMode && activeView !== "BFSI" && activeView !== "Coaching" && activeView !== "CEOs" && (
                 <EnrichedTable companies={enrichedCompanies} type={activeView as "SaaS" | "AI"} />
               )}
               {activeTab === "Sourcing" && !isEnrichedMode && (
