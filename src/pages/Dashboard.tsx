@@ -52,6 +52,10 @@ function getCeoCompanies() {
   if (!_ceoCompanies) _ceoCompanies = generateFundedCEOs();
   return _ceoCompanies;
 }
+function getMarketIntel() {
+  if (!_marketIntel) _marketIntel = generateMarketIntel();
+  return _marketIntel;
+}
 
 export default function Dashboard() {
   const [activeView, setActiveView] = useState<ViewMode>("Jobs");
