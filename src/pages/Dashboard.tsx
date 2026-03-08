@@ -18,6 +18,7 @@ import { ICAITable } from "@/components/dashboard/ICAITable";
 import { ComplianceHeadTable } from "@/components/dashboard/ComplianceHeadTable";
 import { CSJobTable } from "@/components/dashboard/CSJobTable";
 import { CFOTable } from "@/components/dashboard/CFOTable";
+import { USAComplianceTable } from "@/components/dashboard/USAComplianceTable";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Search } from "lucide-react";
