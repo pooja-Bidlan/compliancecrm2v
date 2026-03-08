@@ -111,6 +111,13 @@ export default function Dashboard() {
     Profile: "Profile & Settings",
   };
 
+  const tabDescriptions: Record<string, string> = {
+    Sourcing: activeView === "Jobs" ? "Browse and apply to remote compliance roles" : "Discover funded CEOs for fractional engagements",
+    Archive: "Track all your outreach activity in one place",
+    Inbox: "Manage responses and follow-ups",
+    Profile: "Configure your outreach profile and templates",
+  };
+
   return (
     <SidebarProvider>
       <div className="min-h-screen flex w-full">
@@ -122,28 +129,33 @@ export default function Dashboard() {
           onExport={handleExport}
         />
         <SidebarInset>
-          <header className="flex items-center gap-4 border-b border-border px-4 py-3 lg:px-6">
+          <header className="sticky top-0 z-10 flex items-center gap-4 border-b border-border bg-background/80 backdrop-blur-xl px-4 py-4 lg:px-8">
             <SidebarTrigger />
-            <div className="flex-1">
-              <h1 className="text-lg font-bold text-foreground">{tabTitles[activeTab]}</h1>
+            <div className="flex-1 min-w-0">
+              <h1 className="text-xl font-bold text-foreground tracking-tight">{tabTitles[activeTab]}</h1>
+              <p className="text-xs text-muted-foreground mt-0.5 hidden sm:block">{tabDescriptions[activeTab]}</p>
             </div>
-            <Badge variant="outline" className="gap-1.5 text-xs">
-              <Zap className="h-3 w-3 text-success" /> Active
+            <Badge variant="outline" className="gap-1.5 text-xs rounded-full px-3 py-1 border-success/30 bg-success/5">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-success opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-success"></span>
+              </span>
+              Active
             </Badge>
             {(activeTab === "Sourcing" || activeTab === "Archive") && (
               <div className="relative w-64 hidden md:block">
                 <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
                 <Input
-                  placeholder="Search..."
+                  placeholder="Search leads..."
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  className="pl-9 h-9"
+                  className="pl-9 h-9 rounded-lg bg-muted/50 border-transparent focus:border-primary/30 focus:bg-card transition-all"
                 />
               </div>
             )}
           </header>
 
-          <div className="flex-1 p-4 lg:p-6">
+          <div className="flex-1 p-4 lg:p-8 animate-fade-in">
             {activeTab === "Sourcing" && (
               <SourcingTab leads={filteredLeads} activeView={activeView} onOutreach={handleOutreach} />
             )}

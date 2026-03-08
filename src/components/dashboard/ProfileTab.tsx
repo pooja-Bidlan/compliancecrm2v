@@ -32,7 +32,6 @@ function isValidEmail(value: string): boolean {
 }
 
 function sanitizeText(value: string): string {
-  // Remove control characters except newlines and tabs
   return value.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, "");
 }
 
@@ -91,47 +90,48 @@ export function ProfileTab({ profile, onSave }: ProfileTabProps) {
   };
 
   return (
-    <Card className="max-w-2xl border-border">
-      <CardHeader>
-        <CardTitle>Outreach Profile</CardTitle>
+    <Card className="max-w-2xl border-border/60 rounded-xl shadow-sm">
+      <CardHeader className="pb-4">
+        <CardTitle className="text-xl tracking-tight">Outreach Profile</CardTitle>
         <CardDescription>These details are used in your auto-generated email templates.</CardDescription>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-5">
         <div className="space-y-2">
-          <Label>LinkedIn Bio / Summary</Label>
+          <Label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">LinkedIn Bio / Summary</Label>
           <Textarea
             value={bio}
             onChange={(e) => setBio(e.target.value)}
             rows={3}
             placeholder="Your professional summary..."
             maxLength={MAX_BIO_LENGTH}
+            className="rounded-lg resize-none"
           />
           <p className="text-xs text-muted-foreground">{bio.length}/{MAX_BIO_LENGTH}</p>
           {errors.bio && <p className="text-xs text-destructive">{errors.bio}</p>}
         </div>
         <div className="space-y-2">
-          <Label>Outreach Email</Label>
-          <Input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@company.com" maxLength={255} />
+          <Label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Outreach Email</Label>
+          <Input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@company.com" maxLength={255} className="rounded-lg" />
           {errors.email && <p className="text-xs text-destructive">{errors.email}</p>}
         </div>
         <div className="grid gap-4 sm:grid-cols-3">
           <div className="space-y-2">
-            <Label>Deck Link</Label>
-            <Input value={deck} onChange={(e) => setDeck(e.target.value)} placeholder="https://..." maxLength={MAX_LINK_LENGTH} />
+            <Label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Deck Link</Label>
+            <Input value={deck} onChange={(e) => setDeck(e.target.value)} placeholder="https://..." maxLength={MAX_LINK_LENGTH} className="rounded-lg" />
             {errors.deck && <p className="text-xs text-destructive">{errors.deck}</p>}
           </div>
           <div className="space-y-2">
-            <Label>Profile Link</Label>
-            <Input value={profileLink} onChange={(e) => setProfileLink(e.target.value)} placeholder="https://..." maxLength={MAX_LINK_LENGTH} />
+            <Label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Profile Link</Label>
+            <Input value={profileLink} onChange={(e) => setProfileLink(e.target.value)} placeholder="https://..." maxLength={MAX_LINK_LENGTH} className="rounded-lg" />
             {errors.profileLink && <p className="text-xs text-destructive">{errors.profileLink}</p>}
           </div>
           <div className="space-y-2">
-            <Label>Blog Link</Label>
-            <Input value={blog} onChange={(e) => setBlog(e.target.value)} placeholder="https://..." maxLength={MAX_LINK_LENGTH} />
+            <Label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Blog Link</Label>
+            <Input value={blog} onChange={(e) => setBlog(e.target.value)} placeholder="https://..." maxLength={MAX_LINK_LENGTH} className="rounded-lg" />
             {errors.blog && <p className="text-xs text-destructive">{errors.blog}</p>}
           </div>
         </div>
-        <Button onClick={handleSave} disabled={saving} className="gap-2">
+        <Button onClick={handleSave} disabled={saving} className="gap-2 rounded-lg shadow-sm">
           <Save className="h-4 w-4" /> {saving ? "Saving..." : "Save Profile"}
         </Button>
       </CardContent>
