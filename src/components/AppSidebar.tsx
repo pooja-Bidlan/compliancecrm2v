@@ -30,6 +30,7 @@ const modeItems: { id: ViewMode; icon: typeof Briefcase; label: string; count?: 
   { id: "CEOs", icon: Users, label: "Funded CEOs" },
   { id: "SaaS", icon: Building2, label: "SaaS Companies", count: "10K" },
   { id: "AI", icon: Bot, label: "AI Companies", count: "5K" },
+  { id: "BFSI", icon: Landmark, label: "BFSI Companies", count: "50K" },
 ];
 
 export function AppSidebar({ activeView, setActiveView, activeTab, setActiveTab, onExport }: AppSidebarProps) {
