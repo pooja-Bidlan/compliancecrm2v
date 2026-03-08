@@ -157,7 +157,7 @@ export const BFSI_COLUMNS: { key: keyof BFSICompany; label: string }[] = [
 ];
 
 export function generateBFSICompanies(): BFSICompany[] {
-  const count = 50000;
+  const count = 80000;
   const rand = seededRandom(31337);
   const results: BFSICompany[] = [];
 
