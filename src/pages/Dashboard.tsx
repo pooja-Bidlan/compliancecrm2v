@@ -219,7 +219,10 @@ export default function Dashboard() {
 
           <div className="flex-1 p-4 lg:p-8">
             <div key={`${activeTab}-${activeView}`} className="animate-fade-in">
-              {activeTab === "Sourcing" && isEnrichedMode && (
+              {activeTab === "Sourcing" && activeView === "BFSI" && (
+                <BFSITable companies={bfsiCompanies} />
+              )}
+              {activeTab === "Sourcing" && isEnrichedMode && activeView !== "BFSI" && (
                 <EnrichedTable companies={enrichedCompanies} type={activeView as "SaaS" | "AI"} />
               )}
               {activeTab === "Sourcing" && !isEnrichedMode && (
