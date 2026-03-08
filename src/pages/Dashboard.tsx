@@ -299,6 +299,9 @@ export default function Dashboard() {
         : activeView === "MarketIntel" ? "Market Intelligence"
         : activeView === "Lawyers" ? "Lawyers & Advocates (Pan-India)"
         : activeView === "LawyersDelhi" ? "Lawyers & Advocates (Delhi NCR)"
+        : activeView === "MCA" ? "MCA Listed Companies (Foreign Directors)"
+        : activeView === "ICSI" ? "ICSI — Company Secretaries in Practice"
+        : activeView === "ICAI" ? "ICAI — Chartered Accountants in Practice"
         : "Coaching Institutes Database"
       : "Regulatory CEO Outreach",
     Archive: "Master Archive",
