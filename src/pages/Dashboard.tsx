@@ -8,6 +8,7 @@ import { ProfileTab } from "@/components/dashboard/ProfileTab";
 import { EnrichedTable } from "@/components/dashboard/EnrichedTable";
 import { BFSITable } from "@/components/dashboard/BFSITable";
 import { CoachingTable } from "@/components/dashboard/CoachingTable";
+import { CeoTable } from "@/components/dashboard/CeoTable";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Search } from "lucide-react";
@@ -15,6 +16,7 @@ import { generateLeads, type Lead } from "@/lib/mock-data";
 import { generateEnrichedCompanies, ENRICHED_COLUMNS, type EnrichedCompany } from "@/lib/enriched-data";
 import { generateBFSICompanies, BFSI_COLUMNS, type BFSICompany } from "@/lib/bfsi-data";
 import { generateCoachingCompanies, COACHING_COLUMNS, type CoachingCompany } from "@/lib/coaching-data";
+import { generateFundedCEOs, CEO_COLUMNS, type FundedCEO } from "@/lib/ceo-data";
 import { convertToCSV, convertEnrichedToCSV, downloadCSV, type ExportRow } from "@/lib/csv-utils";
 import { useOutreachLogs } from "@/hooks/useOutreachLogs";
 import { useUserProfile } from "@/hooks/useUserProfile";
@@ -26,6 +28,7 @@ let _saasCompanies: EnrichedCompany[] | null = null;
 let _aiCompanies: EnrichedCompany[] | null = null;
 let _bfsiCompanies: BFSICompany[] | null = null;
 let _coachingCompanies: CoachingCompany[] | null = null;
+let _ceoCompanies: FundedCEO[] | null = null;
 function getSaasCompanies() {
   if (!_saasCompanies) _saasCompanies = generateEnrichedCompanies("SaaS");
   return _saasCompanies;
@@ -42,6 +45,10 @@ function getCoachingCompanies() {
   if (!_coachingCompanies) _coachingCompanies = generateCoachingCompanies();
   return _coachingCompanies;
 }
+function getCeoCompanies() {
+  if (!_ceoCompanies) _ceoCompanies = generateFundedCEOs();
+  return _ceoCompanies;
+}
 
 export default function Dashboard() {
   const [activeView, setActiveView] = useState<ViewMode>("Jobs");
@@ -50,7 +57,7 @@ export default function Dashboard() {
   const { logs, addLog, updateLog } = useOutreachLogs();
   const { profile, updateProfile } = useUserProfile();
 
-  const isEnrichedMode = activeView === "SaaS" || activeView === "AI" || activeView === "BFSI" || activeView === "Coaching";
+  const isEnrichedMode = activeView === "SaaS" || activeView === "AI" || activeView === "BFSI" || activeView === "Coaching" || activeView === "CEOs";
 
   const enrichedCompanies = useMemo(() => {
     if (activeView === "SaaS") return getSaasCompanies();
@@ -68,7 +75,12 @@ export default function Dashboard() {
     return [];
   }, [activeView]);
 
-  const currentLeads = activeView === "Jobs" ? jobs : ceos;
+  const ceoCompanies = useMemo(() => {
+    if (activeView === "CEOs") return getCeoCompanies();
+    return [];
+  }, [activeView]);
+
+  const currentLeads = activeView === "Jobs" ? jobs : activeView === "CEOs" ? [] as Lead[] : ceos;
   const filteredLeads = currentLeads.filter(
     (l) =>
       l.entity.toLowerCase().includes(search.toLowerCase()) ||
@@ -153,6 +165,9 @@ export default function Dashboard() {
     } else if (activeView === "Coaching") {
       const csv = convertGenericCSV(coachingCompanies, COACHING_COLUMNS);
       downloadCSV(csv, `Coaching_Companies_Full.csv`);
+    } else if (activeView === "CEOs") {
+      const csv = convertGenericCSV(ceoCompanies, CEO_COLUMNS as { key: string; label: string }[]);
+      downloadCSV(csv, `Funded_CEOs_Full.csv`);
     } else if (isEnrichedMode) {
       const csv = convertEnrichedToCSV(enrichedCompanies, ENRICHED_COLUMNS);
       downloadCSV(csv, `${activeView}_Companies_Full.csv`);
@@ -176,6 +191,7 @@ export default function Dashboard() {
       ? activeView === "SaaS" ? "SaaS Companies Database"
         : activeView === "AI" ? "AI Companies Database"
         : activeView === "BFSI" ? "BFSI Companies Database"
+        : activeView === "CEOs" ? "Funded CEOs Database"
         : "Coaching Institutes Database"
       : activeView === "Jobs" ? "Remote FCCO / FCO Hunt" : "Regulatory CEO Outreach",
     Archive: "Master Archive",
@@ -191,6 +207,8 @@ export default function Dashboard() {
         ? "5,000 global AI companies with 50+ employees — enriched with 26 data columns"
         : activeView === "BFSI"
         ? "80,000 India BFSI companies — Banks, FinTechs, NBFCs, SFBs, Insurance — enriched with 26 columns"
+        : activeView === "CEOs"
+        ? "20,000 funded CEOs globally — enriched with 26 columns including company native country"
         : "40,000 coaching institutes in India — enriched with 26 columns"
       : activeView === "Jobs" ? "Browse and apply to remote compliance roles" : "Discover funded CEOs for fractional engagements",
     Archive: "Track all your outreach activity in one place",
@@ -243,7 +261,10 @@ export default function Dashboard() {
               {activeTab === "Sourcing" && activeView === "Coaching" && (
                 <CoachingTable companies={coachingCompanies} />
               )}
-              {activeTab === "Sourcing" && isEnrichedMode && activeView !== "BFSI" && activeView !== "Coaching" && (
+              {activeTab === "Sourcing" && activeView === "CEOs" && (
+                <CeoTable companies={ceoCompanies} />
+              )}
+              {activeTab === "Sourcing" && isEnrichedMode && activeView !== "BFSI" && activeView !== "Coaching" && activeView !== "CEOs" && (
                 <EnrichedTable companies={enrichedCompanies} type={activeView as "SaaS" | "AI"} />
               )}
               {activeTab === "Sourcing" && !isEnrichedMode && (
