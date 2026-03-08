@@ -136,18 +136,25 @@ const complianceTriggers = [
 ];
 
 export function generateLeads(): { jobs: Lead[]; ceos: Lead[] } {
-  const jobs: Lead[] = jobCompanies.map((c, i) => ({
-    id: `job-${i}`,
-    type: "Job" as const,
-    entity: c,
-    contact: jobContacts[i % jobContacts.length],
-    category: jobCategories[i % jobCategories.length],
-    email: `hr-${i}@${c.toLowerCase().replace(/[\s()]/g, "")}.com`,
-    salary: `$${Math.floor(Math.random() * 80) + 140}k+`,
-    location: jobLocations[i % jobLocations.length],
-    linkedinContact: `https://linkedin.com/in/${jobContactLinkedIn[i % jobContactLinkedIn.length]}`,
-    linkedinCompany: `https://linkedin.com/company/${jobCompanyLinkedIn[i]}`,
-  }));
+  const JOB_COUNT = 5000;
+  const jobs: Lead[] = new Array(JOB_COUNT);
+  // Generate newest first (latest to oldest)
+  for (let i = 0; i < JOB_COUNT; i++) {
+    const ci = i % jobCompanies.length;
+    const c = jobCompanies[ci];
+    jobs[i] = {
+      id: `job-${JOB_COUNT - 1 - i}`,
+      type: "Job" as const,
+      entity: c,
+      contact: jobContacts[i % jobContacts.length],
+      category: jobCategories[i % jobCategories.length],
+      email: `hr-${i}@${c.toLowerCase().replace(/[\s()]/g, "")}.com`,
+      salary: `$${Math.floor(Math.random() * 80) + 140}k+`,
+      location: jobLocations[i % jobLocations.length],
+      linkedinContact: `https://linkedin.com/in/${jobContactLinkedIn[i % jobContactLinkedIn.length]}`,
+      linkedinCompany: `https://linkedin.com/company/${jobCompanyLinkedIn[ci]}`,
+    };
+  }
 
   const ceos: Lead[] = ceoCompanies.map((c, i) => ({
     id: `ceo-${i}`,
