@@ -165,6 +165,9 @@ export default function Dashboard() {
     } else if (activeView === "Coaching") {
       const csv = convertGenericCSV(coachingCompanies, COACHING_COLUMNS);
       downloadCSV(csv, `Coaching_Companies_Full.csv`);
+    } else if (activeView === "CEOs") {
+      const csv = convertGenericCSV(ceoCompanies, CEO_COLUMNS as { key: string; label: string }[]);
+      downloadCSV(csv, `Funded_CEOs_Full.csv`);
     } else if (isEnrichedMode) {
       const csv = convertEnrichedToCSV(enrichedCompanies, ENRICHED_COLUMNS);
       downloadCSV(csv, `${activeView}_Companies_Full.csv`);
