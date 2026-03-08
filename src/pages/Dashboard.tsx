@@ -45,6 +45,9 @@ let _marketIntel: MarketIntelProspect[] | null = null;
 let _lawyersPanIndia: LawyerProspect[] | null = null;
 let _lawyersDelhi: LawyerProspect[] | null = null;
 let _remoteJobs: RemoteJob[] | null = null;
+let _mcaCompanies: MCACompany[] | null = null;
+let _icsiPractitioners: ICSIPractitioner[] | null = null;
+let _icaiPractitioners: ICAIPractitioner[] | null = null;
 function getSaasCompanies() {
   if (!_saasCompanies) _saasCompanies = generateEnrichedCompanies("SaaS");
   return _saasCompanies;
