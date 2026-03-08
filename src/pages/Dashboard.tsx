@@ -71,6 +71,10 @@ function getLawyersDelhi() {
   if (!_lawyersDelhi) _lawyersDelhi = generateLawyersDelhiNCR();
   return _lawyersDelhi;
 }
+function getRemoteJobs() {
+  if (!_remoteJobs) _remoteJobs = generateRemoteJobs();
+  return _remoteJobs;
+}
 
 export default function Dashboard() {
   const [activeView, setActiveView] = useState<ViewMode>("Jobs");
