@@ -76,8 +76,9 @@ function getICAIPractitioners() { if (!_icaiPractitioners) _icaiPractitioners = 
 function getComplianceHeads() { if (!_complianceHeads) _complianceHeads = generateComplianceHeads(); return _complianceHeads; }
 function getCSJobRecords() { if (!_csJobRecords) _csJobRecords = generateCSJobRecords(); return _csJobRecords; }
 function getCFORecords() { if (!_cfoRecords) _cfoRecords = generateCFORecords(); return _cfoRecords; }
+function getUSACompliance() { if (!_usaCompliance) _usaCompliance = generateUSAComplianceRecords(); return _usaCompliance; }
 
-const ENRICHED_VIEWS: ViewMode[] = ["SaaS", "AI", "BFSI", "Coaching", "CEOs", "MarketIntel", "Lawyers", "LawyersDelhi", "Jobs", "MCA", "ICSI", "ICAI", "ComplianceHead", "CSJob", "CFO"];
+const ENRICHED_VIEWS: ViewMode[] = ["SaaS", "AI", "BFSI", "Coaching", "CEOs", "MarketIntel", "Lawyers", "LawyersDelhi", "Jobs", "MCA", "ICSI", "ICAI", "ComplianceHead", "CSJob", "CFO", "USACompliance"];
 
 export default function Dashboard() {
   const [activeView, setActiveView] = useState<ViewMode>("Jobs");
