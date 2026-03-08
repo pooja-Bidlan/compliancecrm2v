@@ -224,7 +224,7 @@ export default function Dashboard() {
     Profile: "Configure your outreach profile and templates",
   };
 
-  const CUSTOM_VIEWS: ViewMode[] = ["BFSI", "Coaching", "CEOs", "MarketIntel", "Lawyers", "LawyersDelhi", "Jobs", "MCA", "ICSI", "ICAI", "ComplianceHead", "CSJob", "CFO"];
+  const CUSTOM_VIEWS: ViewMode[] = ["BFSI", "Coaching", "CEOs", "MarketIntel", "Lawyers", "LawyersDelhi", "Jobs", "MCA", "ICSI", "ICAI", "ComplianceHead", "CSJob", "CFO", "USACompliance"];
 
   return (
     <SidebarProvider>
