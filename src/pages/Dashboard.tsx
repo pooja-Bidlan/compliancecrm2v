@@ -175,7 +175,8 @@ export default function Dashboard() {
     Sourcing: isEnrichedMode
       ? activeView === "SaaS" ? "SaaS Companies Database"
         : activeView === "AI" ? "AI Companies Database"
-        : "BFSI Companies Database"
+        : activeView === "BFSI" ? "BFSI Companies Database"
+        : "Coaching Institutes Database"
       : activeView === "Jobs" ? "Remote FCCO / FCO Hunt" : "Regulatory CEO Outreach",
     Archive: "Master Archive",
     Inbox: "Response Hub",
