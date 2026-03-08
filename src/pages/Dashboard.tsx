@@ -60,6 +60,14 @@ function getMarketIntel() {
   if (!_marketIntel) _marketIntel = generateMarketIntel();
   return _marketIntel;
 }
+function getLawyersPanIndia() {
+  if (!_lawyersPanIndia) _lawyersPanIndia = generateLawyersPanIndia();
+  return _lawyersPanIndia;
+}
+function getLawyersDelhi() {
+  if (!_lawyersDelhi) _lawyersDelhi = generateLawyersDelhiNCR();
+  return _lawyersDelhi;
+}
 
 export default function Dashboard() {
   const [activeView, setActiveView] = useState<ViewMode>("Jobs");
