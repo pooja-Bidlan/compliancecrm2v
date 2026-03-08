@@ -22,6 +22,7 @@ const { jobs, ceos } = generateLeads();
 // Lazy-generate enriched data only when needed
 let _saasCompanies: EnrichedCompany[] | null = null;
 let _aiCompanies: EnrichedCompany[] | null = null;
+let _bfsiCompanies: BFSICompany[] | null = null;
 function getSaasCompanies() {
   if (!_saasCompanies) _saasCompanies = generateEnrichedCompanies("SaaS");
   return _saasCompanies;
@@ -29,6 +30,10 @@ function getSaasCompanies() {
 function getAiCompanies() {
   if (!_aiCompanies) _aiCompanies = generateEnrichedCompanies("AI");
   return _aiCompanies;
+}
+function getBfsiCompanies() {
+  if (!_bfsiCompanies) _bfsiCompanies = generateBFSICompanies();
+  return _bfsiCompanies;
 }
 
 export default function Dashboard() {
