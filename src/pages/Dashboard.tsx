@@ -12,6 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { Search } from "lucide-react";
 import { generateLeads, type Lead } from "@/lib/mock-data";
 import { generateEnrichedCompanies, ENRICHED_COLUMNS, type EnrichedCompany } from "@/lib/enriched-data";
+import { generateBFSICompanies, BFSI_COLUMNS, type BFSICompany } from "@/lib/bfsi-data";
 import { convertToCSV, convertEnrichedToCSV, downloadCSV, type ExportRow } from "@/lib/csv-utils";
 import { useOutreachLogs } from "@/hooks/useOutreachLogs";
 import { useUserProfile } from "@/hooks/useUserProfile";
