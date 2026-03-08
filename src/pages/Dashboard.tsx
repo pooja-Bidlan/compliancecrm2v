@@ -327,6 +327,12 @@ export default function Dashboard() {
         ? "100,000 practicing lawyers & advocate firms across India (excl. Delhi NCR) — sell LegalTech API access"
         : activeView === "LawyersDelhi"
         ? "80,000 practicing lawyers & advocate firms in Delhi NCR — sell LegalTech API access"
+        : activeView === "MCA"
+        ? "40,000 MCA listed companies with foreign directors — enriched with 26 columns"
+        : activeView === "ICSI"
+        ? "20,000 Company Secretaries in practice across India — firm names, emails, enriched with 25 columns"
+        : activeView === "ICAI"
+        ? "20,000 Chartered Accountants in practice across India — firm names, emails, enriched with 25 columns"
         : "40,000 coaching institutes in India — enriched with 26 columns"
       : "Discover funded CEOs for fractional engagements",
     Archive: "Track all your outreach activity in one place",
