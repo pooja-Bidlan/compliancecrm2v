@@ -15,7 +15,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
-export type ViewMode = "Jobs" | "CEOs" | "SaaS" | "AI" | "BFSI" | "Coaching" | "MarketIntel" | "Lawyers" | "LawyersDelhi";
+export type ViewMode = "Jobs" | "CEOs" | "SaaS" | "AI" | "BFSI" | "Coaching" | "MarketIntel" | "Lawyers" | "LawyersDelhi" | "MCA" | "ICSI" | "ICAI";
 
 interface AppSidebarProps {
   activeView: ViewMode;
@@ -35,6 +35,9 @@ const modeItems: { id: ViewMode; icon: typeof Briefcase; label: string; count?: 
   { id: "MarketIntel", icon: Newspaper, label: "Market Intelligence", count: "5K" },
   { id: "Lawyers", icon: Scale, label: "Lawyers Pan-India", count: "100K" },
   { id: "LawyersDelhi", icon: Scale, label: "Lawyers Delhi NCR", count: "80K" },
+  { id: "MCA", icon: FileText, label: "MCA Listed (Foreign Dir.)", count: "40K" },
+  { id: "ICSI", icon: BookOpen, label: "ICSI Practice", count: "20K" },
+  { id: "ICAI", icon: Calculator, label: "ICAI Practice", count: "20K" },
 ];
 
 export function AppSidebar({ activeView, setActiveView, activeTab, setActiveTab, onExport }: AppSidebarProps) {
