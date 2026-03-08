@@ -236,6 +236,8 @@ export default function Dashboard() {
         : activeView === "BFSI" ? "BFSI Companies Database"
         : activeView === "CEOs" ? "Funded CEOs Database"
         : activeView === "MarketIntel" ? "Market Intelligence"
+        : activeView === "Lawyers" ? "Lawyers & Advocates (Pan-India)"
+        : activeView === "LawyersDelhi" ? "Lawyers & Advocates (Delhi NCR)"
         : "Coaching Institutes Database"
       : activeView === "Jobs" ? "Remote FCCO / FCO Hunt" : "Regulatory CEO Outreach",
     Archive: "Master Archive",
