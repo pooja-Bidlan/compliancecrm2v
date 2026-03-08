@@ -158,7 +158,9 @@ export default function Dashboard() {
 
   const tabTitles: Record<string, string> = {
     Sourcing: isEnrichedMode
-      ? activeView === "SaaS" ? "SaaS Companies Database" : "AI Companies Database"
+      ? activeView === "SaaS" ? "SaaS Companies Database"
+        : activeView === "AI" ? "AI Companies Database"
+        : "BFSI Companies Database"
       : activeView === "Jobs" ? "Remote FCCO / FCO Hunt" : "Regulatory CEO Outreach",
     Archive: "Master Archive",
     Inbox: "Response Hub",
