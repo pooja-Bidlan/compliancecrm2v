@@ -216,6 +216,7 @@ export default function Dashboard() {
         : activeView === "ComplianceHead" ? "50,000 Chief Compliance Officers & Compliance Heads at companies with 500+ employees — 26 enriched columns"
         : activeView === "CSJob" ? "50,000 Company Secretaries in service at companies with 500+ employees — 26 enriched columns"
         : activeView === "CFO" ? "50,000 CFOs & Chief Finance Officers at companies with 500+ employees — 26 enriched columns"
+        : activeView === "USACompliance" ? "100,000 USA listed companies with Chief Compliance Officers — salary, CCO & CEO emails, enriched with 26 columns"
         : "40,000 coaching institutes in India — enriched with 26 columns"
       : "Discover funded CEOs for fractional engagements",
     Archive: "Track all your outreach activity in one place",
