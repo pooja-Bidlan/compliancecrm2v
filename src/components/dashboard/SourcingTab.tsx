@@ -1,8 +1,10 @@
 import { useState, useMemo } from "react";
-import { MapPin, Send, Globe, Linkedin, ChevronLeft, ChevronRight } from "lucide-react";
+import { MapPin, Send, Globe, Linkedin, ChevronLeft, ChevronRight, Search } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 import type { Lead } from "@/lib/mock-data";
 
 interface SourcingTabProps {
