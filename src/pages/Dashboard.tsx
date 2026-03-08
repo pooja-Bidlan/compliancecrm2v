@@ -15,6 +15,9 @@ import { RemoteJobsTable } from "@/components/dashboard/RemoteJobsTable";
 import { MCATable } from "@/components/dashboard/MCATable";
 import { ICSITable } from "@/components/dashboard/ICSITable";
 import { ICAITable } from "@/components/dashboard/ICAITable";
+import { ComplianceHeadTable } from "@/components/dashboard/ComplianceHeadTable";
+import { CSJobTable } from "@/components/dashboard/CSJobTable";
+import { CFOTable } from "@/components/dashboard/CFOTable";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Search } from "lucide-react";
@@ -29,6 +32,9 @@ import { generateRemoteJobs, REMOTE_JOB_COLUMNS, type RemoteJob } from "@/lib/re
 import { generateMCACompanies, MCA_COLUMNS, type MCACompany } from "@/lib/mca-data";
 import { generateICSIPractitioners, ICSI_COLUMNS, type ICSIPractitioner } from "@/lib/icsi-data";
 import { generateICAIPractitioners, ICAI_COLUMNS, type ICAIPractitioner } from "@/lib/icai-data";
+import { generateComplianceHeads, COMPLIANCE_HEAD_COLUMNS, type ComplianceHeadRecord } from "@/lib/compliance-head-data";
+import { generateCSJobRecords, CS_JOB_COLUMNS, type CSJobRecord } from "@/lib/cs-job-data";
+import { generateCFORecords, CFO_COLUMNS, type CFORecord } from "@/lib/cfo-data";
 import { convertToCSV, convertEnrichedToCSV, downloadCSV, type ExportRow } from "@/lib/csv-utils";
 import { useOutreachLogs } from "@/hooks/useOutreachLogs";
 import { useUserProfile } from "@/hooks/useUserProfile";
@@ -48,54 +54,27 @@ let _remoteJobs: RemoteJob[] | null = null;
 let _mcaCompanies: MCACompany[] | null = null;
 let _icsiPractitioners: ICSIPractitioner[] | null = null;
 let _icaiPractitioners: ICAIPractitioner[] | null = null;
-function getSaasCompanies() {
-  if (!_saasCompanies) _saasCompanies = generateEnrichedCompanies("SaaS");
-  return _saasCompanies;
-}
-function getAiCompanies() {
-  if (!_aiCompanies) _aiCompanies = generateEnrichedCompanies("AI");
-  return _aiCompanies;
-}
-function getBfsiCompanies() {
-  if (!_bfsiCompanies) _bfsiCompanies = generateBFSICompanies();
-  return _bfsiCompanies;
-}
-function getCoachingCompanies() {
-  if (!_coachingCompanies) _coachingCompanies = generateCoachingCompanies();
-  return _coachingCompanies;
-}
-function getCeoCompanies() {
-  if (!_ceoCompanies) _ceoCompanies = generateFundedCEOs();
-  return _ceoCompanies;
-}
-function getMarketIntel() {
-  if (!_marketIntel) _marketIntel = generateMarketIntel();
-  return _marketIntel;
-}
-function getLawyersPanIndia() {
-  if (!_lawyersPanIndia) _lawyersPanIndia = generateLawyersPanIndia();
-  return _lawyersPanIndia;
-}
-function getLawyersDelhi() {
-  if (!_lawyersDelhi) _lawyersDelhi = generateLawyersDelhiNCR();
-  return _lawyersDelhi;
-}
-function getRemoteJobs() {
-  if (!_remoteJobs) _remoteJobs = generateRemoteJobs();
-  return _remoteJobs;
-}
-function getMCACompanies() {
-  if (!_mcaCompanies) _mcaCompanies = generateMCACompanies();
-  return _mcaCompanies;
-}
-function getICSIPractitioners() {
-  if (!_icsiPractitioners) _icsiPractitioners = generateICSIPractitioners();
-  return _icsiPractitioners;
-}
-function getICAIPractitioners() {
-  if (!_icaiPractitioners) _icaiPractitioners = generateICAIPractitioners();
-  return _icaiPractitioners;
-}
+let _complianceHeads: ComplianceHeadRecord[] | null = null;
+let _csJobRecords: CSJobRecord[] | null = null;
+let _cfoRecords: CFORecord[] | null = null;
+
+function getSaasCompanies() { if (!_saasCompanies) _saasCompanies = generateEnrichedCompanies("SaaS"); return _saasCompanies; }
+function getAiCompanies() { if (!_aiCompanies) _aiCompanies = generateEnrichedCompanies("AI"); return _aiCompanies; }
+function getBfsiCompanies() { if (!_bfsiCompanies) _bfsiCompanies = generateBFSICompanies(); return _bfsiCompanies; }
+function getCoachingCompanies() { if (!_coachingCompanies) _coachingCompanies = generateCoachingCompanies(); return _coachingCompanies; }
+function getCeoCompanies() { if (!_ceoCompanies) _ceoCompanies = generateFundedCEOs(); return _ceoCompanies; }
+function getMarketIntel() { if (!_marketIntel) _marketIntel = generateMarketIntel(); return _marketIntel; }
+function getLawyersPanIndia() { if (!_lawyersPanIndia) _lawyersPanIndia = generateLawyersPanIndia(); return _lawyersPanIndia; }
+function getLawyersDelhi() { if (!_lawyersDelhi) _lawyersDelhi = generateLawyersDelhiNCR(); return _lawyersDelhi; }
+function getRemoteJobs() { if (!_remoteJobs) _remoteJobs = generateRemoteJobs(); return _remoteJobs; }
+function getMCACompanies() { if (!_mcaCompanies) _mcaCompanies = generateMCACompanies(); return _mcaCompanies; }
+function getICSIPractitioners() { if (!_icsiPractitioners) _icsiPractitioners = generateICSIPractitioners(); return _icsiPractitioners; }
+function getICAIPractitioners() { if (!_icaiPractitioners) _icaiPractitioners = generateICAIPractitioners(); return _icaiPractitioners; }
+function getComplianceHeads() { if (!_complianceHeads) _complianceHeads = generateComplianceHeads(); return _complianceHeads; }
+function getCSJobRecords() { if (!_csJobRecords) _csJobRecords = generateCSJobRecords(); return _csJobRecords; }
+function getCFORecords() { if (!_cfoRecords) _cfoRecords = generateCFORecords(); return _cfoRecords; }
+
+const ENRICHED_VIEWS: ViewMode[] = ["SaaS", "AI", "BFSI", "Coaching", "CEOs", "MarketIntel", "Lawyers", "LawyersDelhi", "Jobs", "MCA", "ICSI", "ICAI", "ComplianceHead", "CSJob", "CFO"];
 
 export default function Dashboard() {
   const [activeView, setActiveView] = useState<ViewMode>("Jobs");
@@ -104,190 +83,92 @@ export default function Dashboard() {
   const { logs, addLog, updateLog } = useOutreachLogs();
   const { profile, updateProfile } = useUserProfile();
 
-  const isEnrichedMode = activeView === "SaaS" || activeView === "AI" || activeView === "BFSI" || activeView === "Coaching" || activeView === "CEOs" || activeView === "MarketIntel" || activeView === "Lawyers" || activeView === "LawyersDelhi" || activeView === "Jobs" || activeView === "MCA" || activeView === "ICSI" || activeView === "ICAI";
+  const isEnrichedMode = ENRICHED_VIEWS.includes(activeView);
 
-  const enrichedCompanies = useMemo(() => {
-    if (activeView === "SaaS") return getSaasCompanies();
-    if (activeView === "AI") return getAiCompanies();
-    return [];
-  }, [activeView]);
+  const enrichedCompanies = useMemo(() => { if (activeView === "SaaS") return getSaasCompanies(); if (activeView === "AI") return getAiCompanies(); return []; }, [activeView]);
+  const bfsiCompanies = useMemo(() => activeView === "BFSI" ? getBfsiCompanies() : [], [activeView]);
+  const coachingCompanies = useMemo(() => activeView === "Coaching" ? getCoachingCompanies() : [], [activeView]);
+  const ceoCompanies = useMemo(() => activeView === "CEOs" ? getCeoCompanies() : [], [activeView]);
+  const marketIntel = useMemo(() => activeView === "MarketIntel" ? getMarketIntel() : [], [activeView]);
+  const lawyersPanIndia = useMemo(() => activeView === "Lawyers" ? getLawyersPanIndia() : [], [activeView]);
+  const lawyersDelhi = useMemo(() => activeView === "LawyersDelhi" ? getLawyersDelhi() : [], [activeView]);
+  const remoteJobs = useMemo(() => activeView === "Jobs" ? getRemoteJobs() : [], [activeView]);
+  const mcaCompanies = useMemo(() => activeView === "MCA" ? getMCACompanies() : [], [activeView]);
+  const icsiPractitioners = useMemo(() => activeView === "ICSI" ? getICSIPractitioners() : [], [activeView]);
+  const icaiPractitioners = useMemo(() => activeView === "ICAI" ? getICAIPractitioners() : [], [activeView]);
+  const complianceHeads = useMemo(() => activeView === "ComplianceHead" ? getComplianceHeads() : [], [activeView]);
+  const csJobRecords = useMemo(() => activeView === "CSJob" ? getCSJobRecords() : [], [activeView]);
+  const cfoRecords = useMemo(() => activeView === "CFO" ? getCFORecords() : [], [activeView]);
 
-  const bfsiCompanies = useMemo(() => {
-    if (activeView === "BFSI") return getBfsiCompanies();
-    return [];
-  }, [activeView]);
-
-  const coachingCompanies = useMemo(() => {
-    if (activeView === "Coaching") return getCoachingCompanies();
-    return [];
-  }, [activeView]);
-
-  const ceoCompanies = useMemo(() => {
-    if (activeView === "CEOs") return getCeoCompanies();
-    return [];
-  }, [activeView]);
-
-  const marketIntel = useMemo(() => {
-    if (activeView === "MarketIntel") return getMarketIntel();
-    return [];
-  }, [activeView]);
-
-  const lawyersPanIndia = useMemo(() => {
-    if (activeView === "Lawyers") return getLawyersPanIndia();
-    return [];
-  }, [activeView]);
-
-  const lawyersDelhi = useMemo(() => {
-    if (activeView === "LawyersDelhi") return getLawyersDelhi();
-    return [];
-  }, [activeView]);
-
-  const remoteJobs = useMemo(() => {
-    if (activeView === "Jobs") return getRemoteJobs();
-    return [];
-  }, [activeView]);
-
-  const mcaCompanies = useMemo(() => {
-    if (activeView === "MCA") return getMCACompanies();
-    return [];
-  }, [activeView]);
-
-  const icsiPractitioners = useMemo(() => {
-    if (activeView === "ICSI") return getICSIPractitioners();
-    return [];
-  }, [activeView]);
-
-  const icaiPractitioners = useMemo(() => {
-    if (activeView === "ICAI") return getICAIPractitioners();
-    return [];
-  }, [activeView]);
-
-  const currentLeads = activeView === "Jobs" ? [] as Lead[] : activeView === "CEOs" ? [] as Lead[] : ceos;
+  const currentLeads = !isEnrichedMode ? ceos : [] as Lead[];
   const filteredLeads = currentLeads.filter(
-    (l) =>
-      l.entity.toLowerCase().includes(search.toLowerCase()) ||
-      l.contact.toLowerCase().includes(search.toLowerCase())
+    (l) => l.entity.toLowerCase().includes(search.toLowerCase()) || l.contact.toLowerCase().includes(search.toLowerCase())
   );
 
   const repository: (ExportRow & { id: string })[] = useMemo(() => {
     if (isEnrichedMode) return [];
     const contactedIds = new Set(logs.map((l) => l.target_id));
-
     const fromLogs = logs
       .filter((l) => l.main_category === activeView)
       .map((log) => ({
-        id: log.id,
-        entity: log.target_name,
-        contact: log.contact_person,
-        category: log.outreach_type,
-        email: log.recipient_email,
-        location: "Synced",
-        metadata: activeView === "Jobs" ? log.salary : log.funding,
-        model: log.model_used,
-        status: `Contacted (S${log.followup_count})`,
-        responseStatus: log.response_status,
+        id: log.id, entity: log.target_name, contact: log.contact_person, category: log.outreach_type,
+        email: log.recipient_email, location: "Synced", metadata: log.funding,
+        model: log.model_used, status: `Contacted (S${log.followup_count})`, responseStatus: log.response_status,
       }));
-
     const fromNew = currentLeads
       .filter((l) => !contactedIds.has(l.id))
       .map((l) => ({
-        id: l.id,
-        entity: l.entity,
-        contact: l.contact,
-        category: l.category,
-        email: l.email,
-        location: l.location,
-        metadata: activeView === "Jobs" ? l.salary : l.funding,
-        model: activeView === "Jobs" ? "Direct" : l.model || "",
-        status: "New",
-        responseStatus: "N/A",
+        id: l.id, entity: l.entity, contact: l.contact, category: l.category,
+        email: l.email, location: l.location, metadata: l.funding,
+        model: l.model || "", status: "New", responseStatus: "N/A",
       }));
-
     return [...fromLogs, ...fromNew];
   }, [activeView, currentLeads, logs, isEnrichedMode]);
 
   const handleOutreach = async (lead: Lead) => {
-    const subject =
-      activeView === "Jobs"
-        ? `Application: ${lead.category} at ${lead.entity}`
-        : `Fractional Model Proposal: AI Governance for ${lead.entity}`;
-
-    const body = `Hi,\n\nRegarding ${activeView === "Jobs" ? "the remote role" : "regulatory assistance"}.\n\nBio: ${profile?.linkedin_bio || ""}\n\nLinks:\n- Deck: ${profile?.deck_link || ""}\n- Profile: ${profile?.profile_link || ""}\n\nBest regards`;
-
+    const subject = `Fractional Model Proposal: AI Governance for ${lead.entity}`;
+    const body = `Hi,\n\nRegarding regulatory assistance.\n\nBio: ${profile?.linkedin_bio || ""}\n\nLinks:\n- Deck: ${profile?.deck_link || ""}\n- Profile: ${profile?.profile_link || ""}\n\nBest regards`;
     await addLog({
-      target_id: lead.id,
-      target_name: lead.entity,
-      contact_person: lead.contact,
-      recipient_email: lead.email,
-      main_category: activeView,
-      outreach_type: lead.category,
-      salary: lead.salary || "",
-      funding: lead.funding || "",
-      model_used: lead.model || "Direct",
-      followup_count: 1,
-      response_status: "No Reply",
+      target_id: lead.id, target_name: lead.entity, contact_person: lead.contact, recipient_email: lead.email,
+      main_category: activeView, outreach_type: lead.category, salary: lead.salary || "", funding: lead.funding || "",
+      model_used: lead.model || "Direct", followup_count: 1, response_status: "No Reply",
     });
-
     window.location.href = `mailto:${lead.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   };
 
   const handleFollowUp = async (log: any) => {
-    await updateLog(log.id, {
-      followup_count: log.followup_count + 1,
-      last_outreach_at: new Date().toISOString(),
-    });
+    await updateLog(log.id, { followup_count: log.followup_count + 1, last_outreach_at: new Date().toISOString() });
     const subject = `Follow-up (S${log.followup_count + 1}): ${log.target_name}`;
     window.location.href = `mailto:${log.recipient_email}?subject=${encodeURIComponent(subject)}`;
-  };
-
-  const handleExport = () => {
-    if (activeView === "Jobs") {
-      const csv = convertGenericCSV(remoteJobs, REMOTE_JOB_COLUMNS as { key: string; label: string }[]);
-      downloadCSV(csv, `Remote_Jobs_Enriched_Full.csv`);
-    } else if (activeView === "BFSI") {
-      const csv = convertGenericCSV(bfsiCompanies, BFSI_COLUMNS);
-      downloadCSV(csv, `BFSI_Companies_Full.csv`);
-    } else if (activeView === "Coaching") {
-      const csv = convertGenericCSV(coachingCompanies, COACHING_COLUMNS);
-      downloadCSV(csv, `Coaching_Companies_Full.csv`);
-    } else if (activeView === "CEOs") {
-      const csv = convertGenericCSV(ceoCompanies, CEO_COLUMNS as { key: string; label: string }[]);
-      downloadCSV(csv, `Funded_CEOs_Full.csv`);
-    } else if (activeView === "MarketIntel") {
-      const csv = convertGenericCSV(marketIntel, MARKET_INTEL_COLUMNS as { key: string; label: string }[]);
-      downloadCSV(csv, `Market_Intelligence_Full.csv`);
-    } else if (activeView === "Lawyers") {
-      const csv = convertGenericCSV(lawyersPanIndia, LAWYER_COLUMNS as { key: string; label: string }[]);
-      downloadCSV(csv, `Lawyers_PanIndia_Full.csv`);
-    } else if (activeView === "LawyersDelhi") {
-      const csv = convertGenericCSV(lawyersDelhi, LAWYER_COLUMNS as { key: string; label: string }[]);
-      downloadCSV(csv, `Lawyers_DelhiNCR_Full.csv`);
-    } else if (activeView === "MCA") {
-      const csv = convertGenericCSV(mcaCompanies, MCA_COLUMNS as { key: string; label: string }[]);
-      downloadCSV(csv, `MCA_Companies_ForeignDir_Full.csv`);
-    } else if (activeView === "ICSI") {
-      const csv = convertGenericCSV(icsiPractitioners, ICSI_COLUMNS as { key: string; label: string }[]);
-      downloadCSV(csv, `ICSI_Practitioners_Full.csv`);
-    } else if (activeView === "ICAI") {
-      const csv = convertGenericCSV(icaiPractitioners, ICAI_COLUMNS as { key: string; label: string }[]);
-      downloadCSV(csv, `ICAI_Practitioners_Full.csv`);
-    } else if (isEnrichedMode) {
-      const csv = convertEnrichedToCSV(enrichedCompanies, ENRICHED_COLUMNS);
-      downloadCSV(csv, `${activeView}_Companies_Full.csv`);
-    } else {
-      const csv = convertToCSV(repository, "CEO");
-      downloadCSV(csv, `${activeView}_Archive.csv`);
-    }
   };
 
   function convertGenericCSV(data: any[], columns: { key: string; label: string }[]) {
     if (!data.length) return "";
     const headers = columns.map((c) => c.label);
-    const rows = data.map((row: any) =>
-      columns.map((c) => `"${String(row[c.key] ?? "").replace(/"/g, '""')}"`).join(",")
-    );
+    const rows = data.map((row: any) => columns.map((c) => `"${String(row[c.key] ?? "").replace(/"/g, '""')}"`).join(","));
     return `${headers.join(",")}\n${rows.join("\n")}`;
   }
+
+  const handleExport = () => {
+    const exportMap: Record<string, () => void> = {
+      Jobs: () => downloadCSV(convertGenericCSV(remoteJobs, REMOTE_JOB_COLUMNS as any), "Remote_Jobs_Enriched_Full.csv"),
+      BFSI: () => downloadCSV(convertGenericCSV(bfsiCompanies, BFSI_COLUMNS), "BFSI_Companies_Full.csv"),
+      Coaching: () => downloadCSV(convertGenericCSV(coachingCompanies, COACHING_COLUMNS), "Coaching_Companies_Full.csv"),
+      CEOs: () => downloadCSV(convertGenericCSV(ceoCompanies, CEO_COLUMNS as any), "Funded_CEOs_Full.csv"),
+      MarketIntel: () => downloadCSV(convertGenericCSV(marketIntel, MARKET_INTEL_COLUMNS as any), "Market_Intelligence_Full.csv"),
+      Lawyers: () => downloadCSV(convertGenericCSV(lawyersPanIndia, LAWYER_COLUMNS as any), "Lawyers_PanIndia_Full.csv"),
+      LawyersDelhi: () => downloadCSV(convertGenericCSV(lawyersDelhi, LAWYER_COLUMNS as any), "Lawyers_DelhiNCR_Full.csv"),
+      MCA: () => downloadCSV(convertGenericCSV(mcaCompanies, MCA_COLUMNS as any), "MCA_Companies_ForeignDir_Full.csv"),
+      ICSI: () => downloadCSV(convertGenericCSV(icsiPractitioners, ICSI_COLUMNS as any), "ICSI_Practitioners_Full.csv"),
+      ICAI: () => downloadCSV(convertGenericCSV(icaiPractitioners, ICAI_COLUMNS as any), "ICAI_Practitioners_Full.csv"),
+      ComplianceHead: () => downloadCSV(convertGenericCSV(complianceHeads, COMPLIANCE_HEAD_COLUMNS as any), "Compliance_Heads_Full.csv"),
+      CSJob: () => downloadCSV(convertGenericCSV(csJobRecords, CS_JOB_COLUMNS as any), "CS_In_Service_Full.csv"),
+      CFO: () => downloadCSV(convertGenericCSV(cfoRecords, CFO_COLUMNS as any), "CFOs_Full.csv"),
+    };
+    if (exportMap[activeView]) { exportMap[activeView](); return; }
+    if (isEnrichedMode) { downloadCSV(convertEnrichedToCSV(enrichedCompanies, ENRICHED_COLUMNS), `${activeView}_Companies_Full.csv`); return; }
+    downloadCSV(convertToCSV(repository, "CEO"), `${activeView}_Archive.csv`);
+  };
 
   const tabTitles: Record<string, string> = {
     Sourcing: isEnrichedMode
@@ -302,6 +183,9 @@ export default function Dashboard() {
         : activeView === "MCA" ? "MCA Listed Companies (Foreign Directors)"
         : activeView === "ICSI" ? "ICSI — Company Secretaries in Practice"
         : activeView === "ICAI" ? "ICAI — Chartered Accountants in Practice"
+        : activeView === "ComplianceHead" ? "Chief Compliance Officers & Compliance Heads"
+        : activeView === "CSJob" ? "Company Secretaries in Service"
+        : activeView === "CFO" ? "CFOs & Chief Finance Officers"
         : "Coaching Institutes Database"
       : "Regulatory CEO Outreach",
     Archive: "Master Archive",
@@ -311,28 +195,20 @@ export default function Dashboard() {
 
   const tabDescriptions: Record<string, string> = {
     Sourcing: isEnrichedMode
-      ? activeView === "Jobs"
-        ? "5,000 remote compliance jobs from LinkedIn, Indeed, job sites — enriched with 25 data columns"
-        : activeView === "SaaS"
-        ? "10,000 SaaS companies with 50+ employees — enriched with 26 data columns"
-        : activeView === "AI"
-        ? "5,000 global AI companies with 50+ employees — enriched with 26 data columns"
-        : activeView === "BFSI"
-        ? "80,000 India BFSI companies — Banks, FinTechs, NBFCs, SFBs, Insurance — enriched with 26 columns"
-        : activeView === "CEOs"
-        ? "20,000 funded CEOs globally — enriched with 26 columns including company native country"
-        : activeView === "MarketIntel"
-        ? "5,000 prospects — new appointments, board & director changes — enriched with 26 columns"
-        : activeView === "Lawyers"
-        ? "100,000 practicing lawyers & advocate firms across India (excl. Delhi NCR) — sell LegalTech API access"
-        : activeView === "LawyersDelhi"
-        ? "80,000 practicing lawyers & advocate firms in Delhi NCR — sell LegalTech API access"
-        : activeView === "MCA"
-        ? "40,000 MCA listed companies with foreign directors — enriched with 26 columns"
-        : activeView === "ICSI"
-        ? "20,000 Company Secretaries in practice across India — firm names, emails, enriched with 25 columns"
-        : activeView === "ICAI"
-        ? "20,000 Chartered Accountants in practice across India — firm names, emails, enriched with 25 columns"
+      ? activeView === "Jobs" ? "5,000 remote compliance jobs from LinkedIn, Indeed, job sites — enriched with 25 data columns"
+        : activeView === "SaaS" ? "10,000 SaaS companies with 50+ employees — enriched with 26 data columns"
+        : activeView === "AI" ? "5,000 global AI companies with 50+ employees — enriched with 26 data columns"
+        : activeView === "BFSI" ? "80,000 India BFSI companies — Banks, FinTechs, NBFCs, SFBs, Insurance — enriched with 26 columns"
+        : activeView === "CEOs" ? "20,000 funded CEOs globally — enriched with 26 columns including company native country"
+        : activeView === "MarketIntel" ? "5,000 prospects — new appointments, board & director changes — enriched with 26 columns"
+        : activeView === "Lawyers" ? "100,000 practicing lawyers & advocate firms across India (excl. Delhi NCR) — sell LegalTech API access"
+        : activeView === "LawyersDelhi" ? "80,000 practicing lawyers & advocate firms in Delhi NCR — sell LegalTech API access"
+        : activeView === "MCA" ? "40,000 MCA listed companies with foreign directors — enriched with 26 columns"
+        : activeView === "ICSI" ? "20,000 Company Secretaries in practice across India — firm names, emails, enriched with 25 columns"
+        : activeView === "ICAI" ? "20,000 Chartered Accountants in practice across India — firm names, emails, enriched with 25 columns"
+        : activeView === "ComplianceHead" ? "50,000 Chief Compliance Officers & Compliance Heads at companies with 500+ employees — 26 enriched columns"
+        : activeView === "CSJob" ? "50,000 Company Secretaries in service at companies with 500+ employees — 26 enriched columns"
+        : activeView === "CFO" ? "50,000 CFOs & Chief Finance Officers at companies with 500+ employees — 26 enriched columns"
         : "40,000 coaching institutes in India — enriched with 26 columns"
       : "Discover funded CEOs for fractional engagements",
     Archive: "Track all your outreach activity in one place",
@@ -340,16 +216,12 @@ export default function Dashboard() {
     Profile: "Configure your outreach profile and templates",
   };
 
+  const CUSTOM_VIEWS: ViewMode[] = ["BFSI", "Coaching", "CEOs", "MarketIntel", "Lawyers", "LawyersDelhi", "Jobs", "MCA", "ICSI", "ICAI", "ComplianceHead", "CSJob", "CFO"];
+
   return (
     <SidebarProvider>
       <div className="min-h-screen flex w-full">
-        <AppSidebar
-          activeView={activeView}
-          setActiveView={setActiveView}
-          activeTab={activeTab}
-          setActiveTab={setActiveTab}
-          onExport={handleExport}
-        />
+        <AppSidebar activeView={activeView} setActiveView={setActiveView} activeTab={activeTab} setActiveTab={setActiveTab} onExport={handleExport} />
         <SidebarInset>
           <header className="sticky top-0 z-10 flex items-center gap-4 border-b border-border bg-background/80 backdrop-blur-xl px-4 py-4 lg:px-8">
             <SidebarTrigger />
@@ -367,49 +239,27 @@ export default function Dashboard() {
             {!isEnrichedMode && (activeTab === "Sourcing" || activeTab === "Archive") && (
               <div className="relative w-64 hidden md:block">
                 <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
-                <Input
-                  placeholder="Search leads..."
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  className="pl-9 h-9 rounded-lg bg-muted/50 border-transparent focus:border-primary/30 focus:bg-card transition-all"
-                />
+                <Input placeholder="Search leads..." value={search} onChange={(e) => setSearch(e.target.value)} className="pl-9 h-9 rounded-lg bg-muted/50 border-transparent focus:border-primary/30 focus:bg-card transition-all" />
               </div>
             )}
           </header>
 
           <div className="flex-1 p-4 lg:p-8">
             <div key={`${activeTab}-${activeView}`} className="animate-fade-in">
-              {activeTab === "Sourcing" && activeView === "BFSI" && (
-                <BFSITable companies={bfsiCompanies} />
-              )}
-              {activeTab === "Sourcing" && activeView === "Coaching" && (
-                <CoachingTable companies={coachingCompanies} />
-              )}
-              {activeTab === "Sourcing" && activeView === "CEOs" && (
-                <CeoTable companies={ceoCompanies} />
-              )}
-              {activeTab === "Sourcing" && activeView === "MarketIntel" && (
-                <MarketIntelTable companies={marketIntel} />
-              )}
-              {activeTab === "Sourcing" && activeView === "Lawyers" && (
-                <LawyersTable companies={lawyersPanIndia} variant="pan-india" />
-              )}
-              {activeTab === "Sourcing" && activeView === "LawyersDelhi" && (
-                <LawyersTable companies={lawyersDelhi} variant="delhi-ncr" />
-              )}
-              {activeTab === "Sourcing" && activeView === "Jobs" && (
-                <RemoteJobsTable jobs={remoteJobs} />
-              )}
-              {activeTab === "Sourcing" && activeView === "MCA" && (
-                <MCATable companies={mcaCompanies} />
-              )}
-              {activeTab === "Sourcing" && activeView === "ICSI" && (
-                <ICSITable practitioners={icsiPractitioners} />
-              )}
-              {activeTab === "Sourcing" && activeView === "ICAI" && (
-                <ICAITable practitioners={icaiPractitioners} />
-              )}
-              {activeTab === "Sourcing" && isEnrichedMode && activeView !== "BFSI" && activeView !== "Coaching" && activeView !== "CEOs" && activeView !== "MarketIntel" && activeView !== "Lawyers" && activeView !== "LawyersDelhi" && activeView !== "Jobs" && activeView !== "MCA" && activeView !== "ICSI" && activeView !== "ICAI" && (
+              {activeTab === "Sourcing" && activeView === "BFSI" && <BFSITable companies={bfsiCompanies} />}
+              {activeTab === "Sourcing" && activeView === "Coaching" && <CoachingTable companies={coachingCompanies} />}
+              {activeTab === "Sourcing" && activeView === "CEOs" && <CeoTable companies={ceoCompanies} />}
+              {activeTab === "Sourcing" && activeView === "MarketIntel" && <MarketIntelTable companies={marketIntel} />}
+              {activeTab === "Sourcing" && activeView === "Lawyers" && <LawyersTable companies={lawyersPanIndia} variant="pan-india" />}
+              {activeTab === "Sourcing" && activeView === "LawyersDelhi" && <LawyersTable companies={lawyersDelhi} variant="delhi-ncr" />}
+              {activeTab === "Sourcing" && activeView === "Jobs" && <RemoteJobsTable jobs={remoteJobs} />}
+              {activeTab === "Sourcing" && activeView === "MCA" && <MCATable companies={mcaCompanies} />}
+              {activeTab === "Sourcing" && activeView === "ICSI" && <ICSITable practitioners={icsiPractitioners} />}
+              {activeTab === "Sourcing" && activeView === "ICAI" && <ICAITable practitioners={icaiPractitioners} />}
+              {activeTab === "Sourcing" && activeView === "ComplianceHead" && <ComplianceHeadTable records={complianceHeads} />}
+              {activeTab === "Sourcing" && activeView === "CSJob" && <CSJobTable records={csJobRecords} />}
+              {activeTab === "Sourcing" && activeView === "CFO" && <CFOTable records={cfoRecords} />}
+              {activeTab === "Sourcing" && isEnrichedMode && !CUSTOM_VIEWS.includes(activeView) && (
                 <EnrichedTable companies={enrichedCompanies} type={activeView as "SaaS" | "AI"} />
               )}
               {activeTab === "Sourcing" && !isEnrichedMode && (
@@ -417,25 +267,14 @@ export default function Dashboard() {
               )}
               {activeTab === "Archive" && (
                 <ArchiveTab
-                  rows={repository.filter(
-                    (r) =>
-                      r.entity.toLowerCase().includes(search.toLowerCase()) ||
-                      r.contact.toLowerCase().includes(search.toLowerCase())
-                  )}
+                  rows={repository.filter(r => r.entity.toLowerCase().includes(search.toLowerCase()) || r.contact.toLowerCase().includes(search.toLowerCase()))}
                   onUpdateResponse={(id, st) => updateLog(id, { response_status: st })}
                 />
               )}
               {activeTab === "Inbox" && (
-                <InboxTab
-                  logs={logs}
-                  activeView={activeView}
-                  onUpdateResponse={(id, st) => updateLog(id, { response_status: st })}
-                  onFollowUp={handleFollowUp}
-                />
+                <InboxTab logs={logs} activeView={activeView} onUpdateResponse={(id, st) => updateLog(id, { response_status: st })} onFollowUp={handleFollowUp} />
               )}
-              {activeTab === "Profile" && (
-                <ProfileTab profile={profile} onSave={updateProfile} />
-              )}
+              {activeTab === "Profile" && <ProfileTab profile={profile} onSave={updateProfile} />}
             </div>
           </div>
         </SidebarInset>
