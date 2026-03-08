@@ -26,6 +26,9 @@ import { generateFundedCEOs, CEO_COLUMNS, type FundedCEO } from "@/lib/ceo-data"
 import { generateMarketIntel, MARKET_INTEL_COLUMNS, type MarketIntelProspect } from "@/lib/market-intel-data";
 import { generateLawyersPanIndia, generateLawyersDelhiNCR, LAWYER_COLUMNS, type LawyerProspect } from "@/lib/lawyers-data";
 import { generateRemoteJobs, REMOTE_JOB_COLUMNS, type RemoteJob } from "@/lib/remote-jobs-data";
+import { generateMCACompanies, MCA_COLUMNS, type MCACompany } from "@/lib/mca-data";
+import { generateICSIPractitioners, ICSI_COLUMNS, type ICSIPractitioner } from "@/lib/icsi-data";
+import { generateICAIPractitioners, ICAI_COLUMNS, type ICAIPractitioner } from "@/lib/icai-data";
 import { convertToCSV, convertEnrichedToCSV, downloadCSV, type ExportRow } from "@/lib/csv-utils";
 import { useOutreachLogs } from "@/hooks/useOutreachLogs";
 import { useUserProfile } from "@/hooks/useUserProfile";
