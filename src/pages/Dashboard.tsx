@@ -84,6 +84,18 @@ function getRemoteJobs() {
   if (!_remoteJobs) _remoteJobs = generateRemoteJobs();
   return _remoteJobs;
 }
+function getMCACompanies() {
+  if (!_mcaCompanies) _mcaCompanies = generateMCACompanies();
+  return _mcaCompanies;
+}
+function getICSIPractitioners() {
+  if (!_icsiPractitioners) _icsiPractitioners = generateICSIPractitioners();
+  return _icsiPractitioners;
+}
+function getICAIPractitioners() {
+  if (!_icaiPractitioners) _icaiPractitioners = generateICAIPractitioners();
+  return _icaiPractitioners;
+}
 
 export default function Dashboard() {
   const [activeView, setActiveView] = useState<ViewMode>("Jobs");
