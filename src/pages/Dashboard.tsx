@@ -25,6 +25,7 @@ const { jobs, ceos } = generateLeads();
 let _saasCompanies: EnrichedCompany[] | null = null;
 let _aiCompanies: EnrichedCompany[] | null = null;
 let _bfsiCompanies: BFSICompany[] | null = null;
+let _coachingCompanies: CoachingCompany[] | null = null;
 function getSaasCompanies() {
   if (!_saasCompanies) _saasCompanies = generateEnrichedCompanies("SaaS");
   return _saasCompanies;
@@ -36,6 +37,10 @@ function getAiCompanies() {
 function getBfsiCompanies() {
   if (!_bfsiCompanies) _bfsiCompanies = generateBFSICompanies();
   return _bfsiCompanies;
+}
+function getCoachingCompanies() {
+  if (!_coachingCompanies) _coachingCompanies = generateCoachingCompanies();
+  return _coachingCompanies;
 }
 
 export default function Dashboard() {
