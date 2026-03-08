@@ -30,25 +30,25 @@ const bfsiCategories = [
   "WealthTech", "InsurTech", "RegTech", "Credit Bureau",
 ];
 
-const countries = [
-  { name: "India", cities: ["Mumbai", "Delhi", "Bangalore", "Chennai", "Hyderabad", "Pune", "Kolkata", "Ahmedabad", "Jaipur", "Lucknow", "Chandigarh", "Kochi", "Noida", "Gurugram", "Indore", "Bhopal", "Vadodara", "Surat", "Nagpur", "Visakhapatnam", "Coimbatore", "Thiruvananthapuram", "Patna", "Ranchi", "Bhubaneswar", "Guwahati", "Dehradun", "Mysuru", "Mangalore", "Rajkot"], region: "India" },
+const indianCities = [
+  "Mumbai", "Delhi", "Bangalore", "Chennai", "Hyderabad", "Pune", "Kolkata",
+  "Ahmedabad", "Jaipur", "Lucknow", "Chandigarh", "Kochi", "Noida", "Gurugram",
+  "Indore", "Bhopal", "Vadodara", "Surat", "Nagpur", "Visakhapatnam",
+  "Coimbatore", "Thiruvananthapuram", "Patna", "Ranchi", "Bhubaneswar",
+  "Guwahati", "Dehradun", "Mysuru", "Mangalore", "Rajkot",
 ];
 
 const firstNames = [
   "Rajesh", "Amit", "Sanjay", "Vikram", "Arun", "Sunil", "Prashant", "Deepak", "Anand", "Rakesh",
-  "James", "Robert", "William", "David", "Michael", "Richard", "Charles", "Thomas", "John", "Daniel",
   "Aditya", "Nitin", "Gaurav", "Manish", "Ashish", "Rohit", "Vivek", "Ajay", "Ramesh", "Suresh",
   "Sarah", "Priya", "Anjali", "Neha", "Kavita", "Sunita", "Meena", "Pooja", "Swati", "Rekha",
-  "Emma", "Laura", "Sophie", "Anna", "Maria", "Elena", "Yuki", "Wei", "Min-Jun", "Ahmed",
   "Karan", "Pankaj", "Harish", "Dinesh", "Satish", "Girish", "Mukesh", "Yogesh", "Naresh", "Mahesh",
 ];
 
 const lastNames = [
   "Sharma", "Patel", "Gupta", "Singh", "Kumar", "Agarwal", "Jain", "Mehta", "Shah", "Bansal",
-  "Smith", "Johnson", "Williams", "Brown", "Jones", "Miller", "Davis", "Wilson", "Anderson", "Taylor",
   "Reddy", "Rao", "Nair", "Pillai", "Iyer", "Menon", "Das", "Bose", "Roy", "Sen",
   "Khanna", "Malhotra", "Kapoor", "Arora", "Bhatia", "Chopra", "Oberoi", "Sinha", "Verma", "Saxena",
-  "Mueller", "Schmidt", "Fischer", "Kim", "Park", "Lee", "Chen", "Wang", "Ali", "Hassan",
   "Mittal", "Goel", "Tiwari", "Pandey", "Mishra", "Dubey", "Chauhan", "Yadav", "Thakur", "Joshi",
 ];
 
@@ -77,14 +77,12 @@ const techStacks = [
 ];
 
 const regulators = [
-  "RBI", "SEBI", "IRDAI", "SEC", "FCA", "MAS", "HKMA", "APRA",
-  "BaFin", "FINMA", "OSFI", "CBUAE", "FSA", "OCC", "FDIC", "PRA",
+  "RBI", "SEBI", "IRDAI", "NABARD", "NHB", "PFRDA", "IBBI", "SIDBI",
 ];
 
 const complianceFrameworks = [
-  "Basel III", "Solvency II", "PCI-DSS", "SOX", "AML/KYC", "GDPR",
-  "DPDP Act", "IFRS 9", "Ind AS", "MiFID II", "Dodd-Frank", "FATCA",
-  "ISO 27001", "NIST", "SOC 2", "RBI Master Directions",
+  "Basel III", "PCI-DSS", "AML/KYC", "DPDP Act", "Ind AS", "IFRS 9",
+  "ISO 27001", "SOC 2", "RBI Master Directions", "SEBI Guidelines",
 ];
 
 const revenueRanges = [
@@ -94,21 +92,12 @@ const revenueRanges = [
 
 const rounds = ["Seed", "Series A", "Series B", "Series C", "Series D", "Series E", "Pre-IPO", "IPO", "Listed", "Private"];
 
-function generateCompanyName(index: number, rand: () => number): string {
-  const prefix = bfsiPrefixes[index % bfsiPrefixes.length];
-  const suffix = bfsiSuffixes[Math.floor(rand() * bfsiSuffixes.length)];
-  if (index >= bfsiPrefixes.length) {
-    const extra = firstNames[index % firstNames.length].slice(0, 3);
-    return `${prefix}${extra}${suffix}`;
-  }
-  return `${prefix}${suffix}`;
-}
+const investors1 = ["Goldman Sachs", "Morgan Stanley", "JP Morgan", "Warburg Pincus", "KKR", "Blackstone", "Carlyle", "Temasek", "GIC", "SoftBank", "Sequoia Capital India", "Accel", "Tiger Global", "QED Investors", "Ribbit Capital", "General Atlantic", "ChrysCapital", "ICICI Venture", "SBI Capital", "HDFC"];
+const investors2 = ["Advent International", "Bain Capital", "TPG", "Apollo Global", "Brookfield", "Fairfax", "CDPQ", "Ontario Teachers", "Abu Dhabi Investment", "Mubadala", "Norges Bank", "Canada Pension", "IFC", "ADB", "DEG", "FMO", "Proparco", "CDC Group", "Norfund", "Swedfund"];
 
-function generatePerson(index: number, rand: () => number) {
-  const first = firstNames[(index * 3 + Math.floor(rand() * 10)) % firstNames.length];
-  const last = lastNames[(index * 7 + Math.floor(rand() * 10)) % lastNames.length];
-  return { first, last, full: `${first} ${last}` };
-}
+// Pre-compute lowercase names to avoid repeated toLowerCase calls
+const firstNamesLower = firstNames.map(n => n.toLowerCase());
+const lastNamesLower = lastNames.map(n => n.toLowerCase());
 
 function slugify(name: string): string {
   return name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
@@ -159,74 +148,103 @@ export const BFSI_COLUMNS: { key: keyof BFSICompany; label: string }[] = [
 export function generateBFSICompanies(): BFSICompany[] {
   const count = 80000;
   const rand = seededRandom(31337);
-  const results: BFSICompany[] = [];
+  const results = new Array<BFSICompany>(count);
+  const fnLen = firstNames.length;
+  const lnLen = lastNames.length;
+  const pfxLen = bfsiPrefixes.length;
+  const sfxLen = bfsiSuffixes.length;
+  const cityLen = indianCities.length;
+  const subLen = bfsiSubSectors.length;
+  const catLen = bfsiCategories.length;
+  const tsLen = techStacks.length;
+  const regLen = regulators.length;
+  const cfLen = complianceFrameworks.length;
+  const rrLen = revenueRanges.length;
+  const rdLen = rounds.length;
+  const i1Len = investors1.length;
+  const i2Len = investors2.length;
 
   for (let i = 0; i < count; i++) {
-    const companyName = generateCompanyName(i, rand);
+    // Company name - inline to avoid function call overhead
+    const prefix = bfsiPrefixes[i % pfxLen];
+    const suffix = bfsiSuffixes[Math.floor(rand() * sfxLen)];
+    const companyName = i >= pfxLen
+      ? `${prefix}${firstNames[i % fnLen].slice(0, 3)}${suffix}`
+      : `${prefix}${suffix}`;
     const domain = slugify(companyName) + ".com";
-    const countryData = pick(countries, rand);
-    const city = pick(countryData.cities, rand);
-    const ceo = generatePerson(i, rand);
-    const md = generatePerson(i + count, rand);
-    const cfo = generatePerson(i + count * 2, rand);
-    const cto = generatePerson(i + count * 3, rand);
-    const subSector = bfsiSubSectors[i % bfsiSubSectors.length];
-    const category = bfsiCategories[i % bfsiCategories.length];
+
+    const city = indianCities[Math.floor(rand() * cityLen)];
+
+    // Person generation - inline
+    const ceoFi = (i * 3 + Math.floor(rand() * 10)) % fnLen;
+    const ceoLi = (i * 7 + Math.floor(rand() * 10)) % lnLen;
+    const mdOff = i + count;
+    const mdFi = (mdOff * 3 + Math.floor(rand() * 10)) % fnLen;
+    const mdLi = (mdOff * 7 + Math.floor(rand() * 10)) % lnLen;
+    const cfoOff = i + count * 2;
+    const cfoFi = (cfoOff * 3 + Math.floor(rand() * 10)) % fnLen;
+    const cfoLi = (cfoOff * 7 + Math.floor(rand() * 10)) % lnLen;
+    const ctoOff = i + count * 3;
+    const ctoFi = (ctoOff * 3 + Math.floor(rand() * 10)) % fnLen;
+    const ctoLi = (ctoOff * 7 + Math.floor(rand() * 10)) % lnLen;
+
     const employeeCount = 50 + Math.floor(rand() * 49950);
-    const foundedYear = 1950 + Math.floor(rand() * 75);
-    const roundIdx = Math.min(Math.floor(rand() * rounds.length), rounds.length - 1);
     const isListed = rand() > 0.4;
     const fundingAmt = isListed
       ? `$${(rand() * 50 + 0.5).toFixed(1)}B`
       : `$${(rand() * 500 + 1).toFixed(1)}M`;
-    const revIdx = Math.min(Math.floor(employeeCount / 2000), revenueRanges.length - 1);
-    const growthPct = (rand() * 80 + 5).toFixed(0);
-    const fundingMonth = Math.floor(rand() * 12) + 1;
+    const revIdx = Math.min(Math.floor(employeeCount / 2000), rrLen - 1);
+    const roundIdx = Math.min(Math.floor(rand() * rdLen), rdLen - 1);
     const fundingYear = 2020 + Math.floor(rand() * 6);
-    const regulator = pick(regulators, rand);
-    const framework = pick(complianceFrameworks, rand);
-    const inv1 = pick(["Goldman Sachs", "Morgan Stanley", "JP Morgan", "Warburg Pincus", "KKR", "Blackstone", "Carlyle", "Temasek", "GIC", "SoftBank", "Sequoia Capital India", "Accel", "Tiger Global", "QED Investors", "Ribbit Capital", "General Atlantic", "ChrysCapital", "ICICI Venture", "SBI Capital", "HDFC"], rand);
-    let inv2 = pick(["Advent International", "Bain Capital", "TPG", "Apollo Global", "Brookfield", "Fairfax", "CDPQ", "Ontario Teachers", "Abu Dhabi Investment", "Mubadala", "Norges Bank", "Canada Pension", "IFC", "ADB", "DEG", "FMO", "Proparco", "CDC Group", "Norfund", "Swedfund"], rand);
+    const fundingMonth = Math.floor(rand() * 12) + 1;
 
-    results.push({
+    const ceoFull = `${firstNames[ceoFi]} ${lastNames[ceoLi]}`;
+    const mdFull = `${firstNames[mdFi]} ${lastNames[mdLi]}`;
+    const cfoFull = `${firstNames[cfoFi]} ${lastNames[cfoLi]}`;
+    const ctoFull = `${firstNames[ctoFi]} ${lastNames[ctoLi]}`;
+
+    const subSector = bfsiSubSectors[i % subLen];
+    const category = bfsiCategories[i % catLen];
+
+    results[i] = {
       id: `bfsi-${i}`,
       companyName,
       industry: "BFSI",
       category,
       subSector,
-      foundedYear,
-      headquarters: `${city}, ${countryData.name}`,
-      country: countryData.name,
-      region: countryData.region,
+      foundedYear: 1950 + Math.floor(rand() * 75),
+      headquarters: `${city}, India`,
+      country: "India",
+      region: "India",
       employeeCount,
       revenueRange: revenueRanges[revIdx],
       fundingTotal: fundingAmt,
       latestRound: rounds[roundIdx],
       valuation: fundingAmt,
       listingStatus: isListed ? "Listed" : "Unlisted",
-      ceoName: ceo.full,
-      ceoEmail: `${ceo.first.toLowerCase()}.${ceo.last.toLowerCase()}@${domain}`,
-      ceoLinkedin: `https://linkedin.com/in/${slugify(ceo.full)}-${i}`,
-      mdName: md.full,
-      mdEmail: `${md.first.toLowerCase()}.${md.last.toLowerCase()}@${domain}`,
-      mdLinkedin: `https://linkedin.com/in/${slugify(md.full)}-md-${i}`,
-      cfoName: cfo.full,
-      cfoEmail: `${cfo.first.toLowerCase()}.${cfo.last.toLowerCase()}@${domain}`,
-      cfoLinkedin: `https://linkedin.com/in/${slugify(cfo.full)}-cfo-${i}`,
-      ctoName: cto.full,
-      ctoEmail: `${cto.first.toLowerCase()}.${cto.last.toLowerCase()}@${domain}`,
-      ctoLinkedin: `https://linkedin.com/in/${slugify(cto.full)}-${i}`,
+      ceoName: ceoFull,
+      ceoEmail: `${firstNamesLower[ceoFi]}.${lastNamesLower[ceoLi]}@${domain}`,
+      ceoLinkedin: `https://linkedin.com/in/${slugify(ceoFull)}-${i}`,
+      mdName: mdFull,
+      mdEmail: `${firstNamesLower[mdFi]}.${lastNamesLower[mdLi]}@${domain}`,
+      mdLinkedin: `https://linkedin.com/in/${slugify(mdFull)}-md-${i}`,
+      cfoName: cfoFull,
+      cfoEmail: `${firstNamesLower[cfoFi]}.${lastNamesLower[cfoLi]}@${domain}`,
+      cfoLinkedin: `https://linkedin.com/in/${slugify(cfoFull)}-cfo-${i}`,
+      ctoName: ctoFull,
+      ctoEmail: `${firstNamesLower[ctoFi]}.${lastNamesLower[ctoLi]}@${domain}`,
+      ctoLinkedin: `https://linkedin.com/in/${slugify(ctoFull)}-${i}`,
       companyLinkedin: `https://linkedin.com/company/${slugify(companyName)}`,
       companyWebsite: `https://${domain}`,
       companyDomain: domain,
-      techStack: pick(techStacks, rand),
-      growthRate: `${growthPct}% YoY`,
+      techStack: techStacks[Math.floor(rand() * tsLen)],
+      growthRate: `${(rand() * 80 + 5).toFixed(0)}% YoY`,
       lastFundingDate: `${fundingYear}-${String(fundingMonth).padStart(2, "0")}`,
-      investors: `${inv1}, ${inv2}`,
-      regulator,
-      complianceFramework: framework,
-      description: `${companyName} is a ${city}-based ${category} specializing in ${subSector.toLowerCase()} with ${employeeCount.toLocaleString()}+ employees. ${isListed ? "Publicly listed." : "Private company."} Regulated by ${regulator}.`,
-    });
+      investors: `${investors1[Math.floor(rand() * i1Len)]}, ${investors2[Math.floor(rand() * i2Len)]}`,
+      regulator: regulators[Math.floor(rand() * regLen)],
+      complianceFramework: complianceFrameworks[Math.floor(rand() * cfLen)],
+      description: `${companyName} is a ${city}-based ${category} specializing in ${subSector.toLowerCase()} with ${employeeCount.toLocaleString()}+ employees. ${isListed ? "Publicly listed." : "Private company."}`,
+    };
   }
 
   return results;
