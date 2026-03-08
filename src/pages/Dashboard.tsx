@@ -121,6 +121,11 @@ export default function Dashboard() {
     return [];
   }, [activeView]);
 
+  const remoteJobs = useMemo(() => {
+    if (activeView === "Jobs") return getRemoteJobs();
+    return [];
+  }, [activeView]);
+
   const currentLeads = activeView === "Jobs" ? jobs : activeView === "CEOs" ? [] as Lead[] : ceos;
   const filteredLeads = currentLeads.filter(
     (l) =>
