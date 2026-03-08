@@ -147,7 +147,22 @@ export default function Dashboard() {
     return [];
   }, [activeView]);
 
-  const currentLeads = activeView === "Jobs" ? jobs : activeView === "CEOs" ? [] as Lead[] : ceos;
+  const mcaCompanies = useMemo(() => {
+    if (activeView === "MCA") return getMCACompanies();
+    return [];
+  }, [activeView]);
+
+  const icsiPractitioners = useMemo(() => {
+    if (activeView === "ICSI") return getICSIPractitioners();
+    return [];
+  }, [activeView]);
+
+  const icaiPractitioners = useMemo(() => {
+    if (activeView === "ICAI") return getICAIPractitioners();
+    return [];
+  }, [activeView]);
+
+  const currentLeads = activeView === "Jobs" ? [] as Lead[] : activeView === "CEOs" ? [] as Lead[] : ceos;
   const filteredLeads = currentLeads.filter(
     (l) =>
       l.entity.toLowerCase().includes(search.toLowerCase()) ||
