@@ -262,11 +262,20 @@ export default function Dashboard() {
     } else if (activeView === "LawyersDelhi") {
       const csv = convertGenericCSV(lawyersDelhi, LAWYER_COLUMNS as { key: string; label: string }[]);
       downloadCSV(csv, `Lawyers_DelhiNCR_Full.csv`);
+    } else if (activeView === "MCA") {
+      const csv = convertGenericCSV(mcaCompanies, MCA_COLUMNS as { key: string; label: string }[]);
+      downloadCSV(csv, `MCA_Companies_ForeignDir_Full.csv`);
+    } else if (activeView === "ICSI") {
+      const csv = convertGenericCSV(icsiPractitioners, ICSI_COLUMNS as { key: string; label: string }[]);
+      downloadCSV(csv, `ICSI_Practitioners_Full.csv`);
+    } else if (activeView === "ICAI") {
+      const csv = convertGenericCSV(icaiPractitioners, ICAI_COLUMNS as { key: string; label: string }[]);
+      downloadCSV(csv, `ICAI_Practitioners_Full.csv`);
     } else if (isEnrichedMode) {
       const csv = convertEnrichedToCSV(enrichedCompanies, ENRICHED_COLUMNS);
       downloadCSV(csv, `${activeView}_Companies_Full.csv`);
     } else {
-      const csv = convertToCSV(repository, activeView === "Jobs" ? "Job" : "CEO");
+      const csv = convertToCSV(repository, "CEO");
       downloadCSV(csv, `${activeView}_Archive.csv`);
     }
   };
