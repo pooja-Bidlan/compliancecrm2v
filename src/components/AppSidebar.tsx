@@ -1,4 +1,4 @@
-import { Briefcase, Users, Rocket, Archive, Inbox, Download, UserCircle } from "lucide-react";
+import { Briefcase, Users, Rocket, Archive, Inbox, Download, UserCircle, Building2, Bot } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -13,14 +13,24 @@ import {
   SidebarSeparator,
 } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+
+export type ViewMode = "Jobs" | "CEOs" | "SaaS" | "AI";
 
 interface AppSidebarProps {
-  activeView: "Jobs" | "CEOs";
-  setActiveView: (v: "Jobs" | "CEOs") => void;
+  activeView: ViewMode;
+  setActiveView: (v: ViewMode) => void;
   activeTab: string;
   setActiveTab: (t: string) => void;
   onExport: () => void;
 }
+
+const modeItems: { id: ViewMode; icon: typeof Briefcase; label: string; count?: string }[] = [
+  { id: "Jobs", icon: Briefcase, label: "Remote Jobs" },
+  { id: "CEOs", icon: Users, label: "Funded CEOs" },
+  { id: "SaaS", icon: Building2, label: "SaaS Companies", count: "10K" },
+  { id: "AI", icon: Bot, label: "AI Companies", count: "5K" },
+];
 
 export function AppSidebar({ activeView, setActiveView, activeTab, setActiveTab, onExport }: AppSidebarProps) {
   const navItems = [
@@ -51,28 +61,24 @@ export function AppSidebar({ activeView, setActiveView, activeTab, setActiveTab,
           <SidebarGroupLabel className="text-[10px] uppercase tracking-[0.15em] text-sidebar-foreground/40 font-semibold px-3">Mode</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton
-                  isActive={activeView === "Jobs"}
-                  onClick={() => { setActiveView("Jobs"); setActiveTab("Sourcing"); }}
-                  tooltip="Remote Jobs"
-                  className="rounded-lg transition-all duration-200"
-                >
-                  <Briefcase className="h-4 w-4" />
-                  <span className="font-medium">Remote Jobs</span>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton
-                  isActive={activeView === "CEOs"}
-                  onClick={() => { setActiveView("CEOs"); setActiveTab("Sourcing"); }}
-                  tooltip="Funded CEOs"
-                  className="rounded-lg transition-all duration-200"
-                >
-                  <Users className="h-4 w-4" />
-                  <span className="font-medium">Funded CEOs</span>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
+              {modeItems.map((mode) => (
+                <SidebarMenuItem key={mode.id}>
+                  <SidebarMenuButton
+                    isActive={activeView === mode.id}
+                    onClick={() => { setActiveView(mode.id); setActiveTab("Sourcing"); }}
+                    tooltip={mode.label}
+                    className="rounded-lg transition-all duration-200"
+                  >
+                    <mode.icon className="h-4 w-4" />
+                    <span className="font-medium flex-1">{mode.label}</span>
+                    {mode.count && (
+                      <Badge variant="secondary" className="text-[10px] px-1.5 py-0 rounded-full ml-auto font-semibold">
+                        {mode.count}
+                      </Badge>
+                    )}
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
