@@ -27,7 +27,7 @@ interface AppSidebarProps {
 
 const modeItems: { id: ViewMode; icon: typeof Briefcase; label: string; count?: string }[] = [
   { id: "Jobs", icon: Briefcase, label: "Remote Jobs" },
-  { id: "CEOs", icon: Users, label: "Funded CEOs" },
+  { id: "CEOs", icon: Users, label: "Funded CEOs", count: "20K" },
   { id: "SaaS", icon: Building2, label: "SaaS Companies", count: "10K" },
   { id: "AI", icon: Bot, label: "AI Companies", count: "5K" },
   { id: "BFSI", icon: Landmark, label: "BFSI India", count: "80K" },
