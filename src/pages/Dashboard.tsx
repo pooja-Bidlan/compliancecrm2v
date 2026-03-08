@@ -319,7 +319,13 @@ export default function Dashboard() {
               {activeTab === "Sourcing" && activeView === "MarketIntel" && (
                 <MarketIntelTable companies={marketIntel} />
               )}
-              {activeTab === "Sourcing" && isEnrichedMode && activeView !== "BFSI" && activeView !== "Coaching" && activeView !== "CEOs" && activeView !== "MarketIntel" && (
+              {activeTab === "Sourcing" && activeView === "Lawyers" && (
+                <LawyersTable companies={lawyersPanIndia} variant="pan-india" />
+              )}
+              {activeTab === "Sourcing" && activeView === "LawyersDelhi" && (
+                <LawyersTable companies={lawyersDelhi} variant="delhi-ncr" />
+              )}
+              {activeTab === "Sourcing" && isEnrichedMode && activeView !== "BFSI" && activeView !== "Coaching" && activeView !== "CEOs" && activeView !== "MarketIntel" && activeView !== "Lawyers" && activeView !== "LawyersDelhi" && (
                 <EnrichedTable companies={enrichedCompanies} type={activeView as "SaaS" | "AI"} />
               )}
               {activeTab === "Sourcing" && !isEnrichedMode && (
