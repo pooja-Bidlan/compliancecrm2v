@@ -75,6 +75,11 @@ export default function Dashboard() {
     return [];
   }, [activeView]);
 
+  const ceoCompanies = useMemo(() => {
+    if (activeView === "CEOs") return getCeoCompanies();
+    return [];
+  }, [activeView]);
+
   const currentLeads = activeView === "Jobs" ? jobs : ceos;
   const filteredLeads = currentLeads.filter(
     (l) =>
