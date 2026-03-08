@@ -63,6 +63,11 @@ export default function Dashboard() {
     return [];
   }, [activeView]);
 
+  const coachingCompanies = useMemo(() => {
+    if (activeView === "Coaching") return getCoachingCompanies();
+    return [];
+  }, [activeView]);
+
   const currentLeads = activeView === "Jobs" ? jobs : ceos;
   const filteredLeads = currentLeads.filter(
     (l) =>
