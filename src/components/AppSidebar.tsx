@@ -1,4 +1,4 @@
-import { Briefcase, Users, Rocket, Archive, Inbox, Download, UserCircle, Building2, Bot, Landmark, GraduationCap, Newspaper, Scale, FileText, BookOpen, Calculator, ShieldCheck, ScrollText, BadgeDollarSign } from "lucide-react";
+import { Briefcase, Users, Rocket, Archive, Inbox, Download, UserCircle, Building2, Bot, Landmark, GraduationCap, Newspaper, Scale, FileText, BookOpen, Calculator, ShieldCheck, ScrollText, BadgeDollarSign, Flag } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -15,7 +15,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
-export type ViewMode = "Jobs" | "CEOs" | "SaaS" | "AI" | "BFSI" | "Coaching" | "MarketIntel" | "Lawyers" | "LawyersDelhi" | "MCA" | "ICSI" | "ICAI" | "ComplianceHead" | "CSJob" | "CFO";
+export type ViewMode = "Jobs" | "CEOs" | "SaaS" | "AI" | "BFSI" | "Coaching" | "MarketIntel" | "Lawyers" | "LawyersDelhi" | "MCA" | "ICSI" | "ICAI" | "ComplianceHead" | "CSJob" | "CFO" | "USACompliance";
 
 interface AppSidebarProps {
   activeView: ViewMode;
@@ -41,6 +41,7 @@ const modeItems: { id: ViewMode; icon: typeof Briefcase; label: string; count?: 
   { id: "ComplianceHead", icon: ShieldCheck, label: "Compliance Heads", count: "50K" },
   { id: "CSJob", icon: ScrollText, label: "CS in Service", count: "50K" },
   { id: "CFO", icon: BadgeDollarSign, label: "CFOs / Chief Finance", count: "50K" },
+  { id: "USACompliance", icon: Flag, label: "USA CCOs (Listed)", count: "100K" },
 ];
 
 export function AppSidebar({ activeView, setActiveView, activeTab, setActiveTab, onExport }: AppSidebarProps) {

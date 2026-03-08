@@ -18,6 +18,7 @@ import { ICAITable } from "@/components/dashboard/ICAITable";
 import { ComplianceHeadTable } from "@/components/dashboard/ComplianceHeadTable";
 import { CSJobTable } from "@/components/dashboard/CSJobTable";
 import { CFOTable } from "@/components/dashboard/CFOTable";
+import { USAComplianceTable } from "@/components/dashboard/USAComplianceTable";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Search } from "lucide-react";
@@ -35,6 +36,7 @@ import { generateICAIPractitioners, ICAI_COLUMNS, type ICAIPractitioner } from "
 import { generateComplianceHeads, COMPLIANCE_HEAD_COLUMNS, type ComplianceHeadRecord } from "@/lib/compliance-head-data";
 import { generateCSJobRecords, CS_JOB_COLUMNS, type CSJobRecord } from "@/lib/cs-job-data";
 import { generateCFORecords, CFO_COLUMNS, type CFORecord } from "@/lib/cfo-data";
+import { generateUSAComplianceRecords, USA_COMPLIANCE_COLUMNS, type USAComplianceRecord } from "@/lib/usa-compliance-data";
 import { convertToCSV, convertEnrichedToCSV, downloadCSV, type ExportRow } from "@/lib/csv-utils";
 import { useOutreachLogs } from "@/hooks/useOutreachLogs";
 import { useUserProfile } from "@/hooks/useUserProfile";
@@ -57,6 +59,7 @@ let _icaiPractitioners: ICAIPractitioner[] | null = null;
 let _complianceHeads: ComplianceHeadRecord[] | null = null;
 let _csJobRecords: CSJobRecord[] | null = null;
 let _cfoRecords: CFORecord[] | null = null;
+let _usaCompliance: USAComplianceRecord[] | null = null;
 
 function getSaasCompanies() { if (!_saasCompanies) _saasCompanies = generateEnrichedCompanies("SaaS"); return _saasCompanies; }
 function getAiCompanies() { if (!_aiCompanies) _aiCompanies = generateEnrichedCompanies("AI"); return _aiCompanies; }
@@ -73,8 +76,9 @@ function getICAIPractitioners() { if (!_icaiPractitioners) _icaiPractitioners = 
 function getComplianceHeads() { if (!_complianceHeads) _complianceHeads = generateComplianceHeads(); return _complianceHeads; }
 function getCSJobRecords() { if (!_csJobRecords) _csJobRecords = generateCSJobRecords(); return _csJobRecords; }
 function getCFORecords() { if (!_cfoRecords) _cfoRecords = generateCFORecords(); return _cfoRecords; }
+function getUSACompliance() { if (!_usaCompliance) _usaCompliance = generateUSAComplianceRecords(); return _usaCompliance; }
 
-const ENRICHED_VIEWS: ViewMode[] = ["SaaS", "AI", "BFSI", "Coaching", "CEOs", "MarketIntel", "Lawyers", "LawyersDelhi", "Jobs", "MCA", "ICSI", "ICAI", "ComplianceHead", "CSJob", "CFO"];
+const ENRICHED_VIEWS: ViewMode[] = ["SaaS", "AI", "BFSI", "Coaching", "CEOs", "MarketIntel", "Lawyers", "LawyersDelhi", "Jobs", "MCA", "ICSI", "ICAI", "ComplianceHead", "CSJob", "CFO", "USACompliance"];
 
 export default function Dashboard() {
   const [activeView, setActiveView] = useState<ViewMode>("Jobs");
@@ -99,6 +103,7 @@ export default function Dashboard() {
   const complianceHeads = useMemo(() => activeView === "ComplianceHead" ? getComplianceHeads() : [], [activeView]);
   const csJobRecords = useMemo(() => activeView === "CSJob" ? getCSJobRecords() : [], [activeView]);
   const cfoRecords = useMemo(() => activeView === "CFO" ? getCFORecords() : [], [activeView]);
+  const usaCompliance = useMemo(() => activeView === "USACompliance" ? getUSACompliance() : [], [activeView]);
 
   const currentLeads = !isEnrichedMode ? ceos : [] as Lead[];
   const filteredLeads = currentLeads.filter(
@@ -164,6 +169,7 @@ export default function Dashboard() {
       ComplianceHead: () => downloadCSV(convertGenericCSV(complianceHeads, COMPLIANCE_HEAD_COLUMNS as any), "Compliance_Heads_Full.csv"),
       CSJob: () => downloadCSV(convertGenericCSV(csJobRecords, CS_JOB_COLUMNS as any), "CS_In_Service_Full.csv"),
       CFO: () => downloadCSV(convertGenericCSV(cfoRecords, CFO_COLUMNS as any), "CFOs_Full.csv"),
+      USACompliance: () => downloadCSV(convertGenericCSV(usaCompliance, USA_COMPLIANCE_COLUMNS as any), "USA_CCOs_Listed_Full.csv"),
     };
     if (exportMap[activeView]) { exportMap[activeView](); return; }
     if (isEnrichedMode) { downloadCSV(convertEnrichedToCSV(enrichedCompanies, ENRICHED_COLUMNS), `${activeView}_Companies_Full.csv`); return; }
@@ -186,6 +192,7 @@ export default function Dashboard() {
         : activeView === "ComplianceHead" ? "Chief Compliance Officers & Compliance Heads"
         : activeView === "CSJob" ? "Company Secretaries in Service"
         : activeView === "CFO" ? "CFOs & Chief Finance Officers"
+        : activeView === "USACompliance" ? "USA Listed Companies — Chief Compliance Officers"
         : "Coaching Institutes Database"
       : "Regulatory CEO Outreach",
     Archive: "Master Archive",
@@ -209,6 +216,7 @@ export default function Dashboard() {
         : activeView === "ComplianceHead" ? "50,000 Chief Compliance Officers & Compliance Heads at companies with 500+ employees — 26 enriched columns"
         : activeView === "CSJob" ? "50,000 Company Secretaries in service at companies with 500+ employees — 26 enriched columns"
         : activeView === "CFO" ? "50,000 CFOs & Chief Finance Officers at companies with 500+ employees — 26 enriched columns"
+        : activeView === "USACompliance" ? "100,000 USA listed companies with Chief Compliance Officers — salary, CCO & CEO emails, enriched with 26 columns"
         : "40,000 coaching institutes in India — enriched with 26 columns"
       : "Discover funded CEOs for fractional engagements",
     Archive: "Track all your outreach activity in one place",
@@ -216,7 +224,7 @@ export default function Dashboard() {
     Profile: "Configure your outreach profile and templates",
   };
 
-  const CUSTOM_VIEWS: ViewMode[] = ["BFSI", "Coaching", "CEOs", "MarketIntel", "Lawyers", "LawyersDelhi", "Jobs", "MCA", "ICSI", "ICAI", "ComplianceHead", "CSJob", "CFO"];
+  const CUSTOM_VIEWS: ViewMode[] = ["BFSI", "Coaching", "CEOs", "MarketIntel", "Lawyers", "LawyersDelhi", "Jobs", "MCA", "ICSI", "ICAI", "ComplianceHead", "CSJob", "CFO", "USACompliance"];
 
   return (
     <SidebarProvider>
@@ -259,6 +267,7 @@ export default function Dashboard() {
               {activeTab === "Sourcing" && activeView === "ComplianceHead" && <ComplianceHeadTable records={complianceHeads} />}
               {activeTab === "Sourcing" && activeView === "CSJob" && <CSJobTable records={csJobRecords} />}
               {activeTab === "Sourcing" && activeView === "CFO" && <CFOTable records={cfoRecords} />}
+              {activeTab === "Sourcing" && activeView === "USACompliance" && <USAComplianceTable records={usaCompliance} />}
               {activeTab === "Sourcing" && isEnrichedMode && !CUSTOM_VIEWS.includes(activeView) && (
                 <EnrichedTable companies={enrichedCompanies} type={activeView as "SaaS" | "AI"} />
               )}
