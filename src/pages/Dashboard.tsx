@@ -263,7 +263,9 @@ export default function Dashboard() {
 
   const tabDescriptions: Record<string, string> = {
     Sourcing: isEnrichedMode
-      ? activeView === "SaaS"
+      ? activeView === "Jobs"
+        ? "5,000 remote compliance jobs from LinkedIn, Indeed, job sites — enriched with 25 data columns"
+        : activeView === "SaaS"
         ? "10,000 SaaS companies with 50+ employees — enriched with 26 data columns"
         : activeView === "AI"
         ? "5,000 global AI companies with 50+ employees — enriched with 26 data columns"
@@ -278,7 +280,7 @@ export default function Dashboard() {
         : activeView === "LawyersDelhi"
         ? "80,000 practicing lawyers & advocate firms in Delhi NCR — sell LegalTech API access"
         : "40,000 coaching institutes in India — enriched with 26 columns"
-      : activeView === "Jobs" ? "Browse and apply to remote compliance roles" : "Discover funded CEOs for fractional engagements",
+      : "Discover funded CEOs for fractional engagements",
     Archive: "Track all your outreach activity in one place",
     Inbox: "Manage responses and follow-ups",
     Profile: "Configure your outreach profile and templates",
