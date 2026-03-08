@@ -12,12 +12,10 @@ import { generateLeads, type Lead } from "@/lib/mock-data";
 import { convertToCSV, downloadCSV, type ExportRow } from "@/lib/csv-utils";
 import { useOutreachLogs } from "@/hooks/useOutreachLogs";
 import { useUserProfile } from "@/hooks/useUserProfile";
-import { useAuth } from "@/hooks/useAuth";
 
 const { jobs, ceos } = generateLeads();
 
 export default function Dashboard() {
-  const { user } = useAuth();
   const [activeView, setActiveView] = useState<"Jobs" | "CEOs">("Jobs");
   const [activeTab, setActiveTab] = useState("Sourcing");
   const [search, setSearch] = useState("");
@@ -68,7 +66,6 @@ export default function Dashboard() {
   }, [activeView, currentLeads, logs]);
 
   const handleOutreach = async (lead: Lead) => {
-    if (!user) return;
     const subject =
       activeView === "Jobs"
         ? `Application: ${lead.category} at ${lead.entity}`
@@ -125,7 +122,6 @@ export default function Dashboard() {
           onExport={handleExport}
         />
         <SidebarInset>
-          {/* Top bar */}
           <header className="flex items-center gap-4 border-b border-border px-4 py-3 lg:px-6">
             <SidebarTrigger />
             <div className="flex-1">
@@ -147,7 +143,6 @@ export default function Dashboard() {
             )}
           </header>
 
-          {/* Content */}
           <div className="flex-1 p-4 lg:p-6">
             {activeTab === "Sourcing" && (
               <SourcingTab leads={filteredLeads} activeView={activeView} onOutreach={handleOutreach} />

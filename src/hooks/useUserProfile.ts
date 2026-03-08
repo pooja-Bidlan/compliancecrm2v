@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "./useAuth";
 
 export interface UserProfile {
   id: string;
@@ -12,23 +11,23 @@ export interface UserProfile {
   outreach_email: string;
 }
 
+const ANON_USER_ID = "anon";
+
 export function useUserProfile() {
-  const { user } = useAuth();
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!user) { setProfile(null); setLoading(false); return; }
-    const fetch = async () => {
-      const { data } = await supabase.from("user_profiles").select("*").eq("user_id", user.id).maybeSingle();
+    const fetchProfile = async () => {
+      const { data } = await supabase.from("user_profiles").select("*").eq("user_id", ANON_USER_ID).maybeSingle();
       setProfile(data as UserProfile | null);
       setLoading(false);
     };
-    fetch();
-  }, [user]);
+    fetchProfile();
+  }, []);
 
   const updateProfile = async (updates: Partial<UserProfile>) => {
-    if (!user || !profile) return;
+    if (!profile) return;
 
     const { data, error } = await supabase.functions.invoke("validate-profile", {
       body: updates,
