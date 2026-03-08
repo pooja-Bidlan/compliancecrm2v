@@ -246,7 +246,8 @@ export default function Dashboard() {
 
   const tabTitles: Record<string, string> = {
     Sourcing: isEnrichedMode
-      ? activeView === "SaaS" ? "SaaS Companies Database"
+      ? activeView === "Jobs" ? "Remote Jobs Database"
+        : activeView === "SaaS" ? "SaaS Companies Database"
         : activeView === "AI" ? "AI Companies Database"
         : activeView === "BFSI" ? "BFSI Companies Database"
         : activeView === "CEOs" ? "Funded CEOs Database"
@@ -254,7 +255,7 @@ export default function Dashboard() {
         : activeView === "Lawyers" ? "Lawyers & Advocates (Pan-India)"
         : activeView === "LawyersDelhi" ? "Lawyers & Advocates (Delhi NCR)"
         : "Coaching Institutes Database"
-      : activeView === "Jobs" ? "Remote FCCO / FCO Hunt" : "Regulatory CEO Outreach",
+      : "Regulatory CEO Outreach",
     Archive: "Master Archive",
     Inbox: "Response Hub",
     Profile: "Profile & Settings",
