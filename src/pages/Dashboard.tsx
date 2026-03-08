@@ -9,6 +9,7 @@ import { EnrichedTable } from "@/components/dashboard/EnrichedTable";
 import { BFSITable } from "@/components/dashboard/BFSITable";
 import { CoachingTable } from "@/components/dashboard/CoachingTable";
 import { CeoTable } from "@/components/dashboard/CeoTable";
+import { MarketIntelTable } from "@/components/dashboard/MarketIntelTable";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Search } from "lucide-react";
@@ -17,6 +18,7 @@ import { generateEnrichedCompanies, ENRICHED_COLUMNS, type EnrichedCompany } fro
 import { generateBFSICompanies, BFSI_COLUMNS, type BFSICompany } from "@/lib/bfsi-data";
 import { generateCoachingCompanies, COACHING_COLUMNS, type CoachingCompany } from "@/lib/coaching-data";
 import { generateFundedCEOs, CEO_COLUMNS, type FundedCEO } from "@/lib/ceo-data";
+import { generateMarketIntel, MARKET_INTEL_COLUMNS, type MarketIntelProspect } from "@/lib/market-intel-data";
 import { convertToCSV, convertEnrichedToCSV, downloadCSV, type ExportRow } from "@/lib/csv-utils";
 import { useOutreachLogs } from "@/hooks/useOutreachLogs";
 import { useUserProfile } from "@/hooks/useUserProfile";
@@ -29,6 +31,7 @@ let _aiCompanies: EnrichedCompany[] | null = null;
 let _bfsiCompanies: BFSICompany[] | null = null;
 let _coachingCompanies: CoachingCompany[] | null = null;
 let _ceoCompanies: FundedCEO[] | null = null;
+let _marketIntel: MarketIntelProspect[] | null = null;
 function getSaasCompanies() {
   if (!_saasCompanies) _saasCompanies = generateEnrichedCompanies("SaaS");
   return _saasCompanies;
@@ -49,6 +52,10 @@ function getCeoCompanies() {
   if (!_ceoCompanies) _ceoCompanies = generateFundedCEOs();
   return _ceoCompanies;
 }
+function getMarketIntel() {
+  if (!_marketIntel) _marketIntel = generateMarketIntel();
+  return _marketIntel;
+}
 
 export default function Dashboard() {
   const [activeView, setActiveView] = useState<ViewMode>("Jobs");
@@ -57,7 +64,7 @@ export default function Dashboard() {
   const { logs, addLog, updateLog } = useOutreachLogs();
   const { profile, updateProfile } = useUserProfile();
 
-  const isEnrichedMode = activeView === "SaaS" || activeView === "AI" || activeView === "BFSI" || activeView === "Coaching" || activeView === "CEOs";
+  const isEnrichedMode = activeView === "SaaS" || activeView === "AI" || activeView === "BFSI" || activeView === "Coaching" || activeView === "CEOs" || activeView === "MarketIntel";
 
   const enrichedCompanies = useMemo(() => {
     if (activeView === "SaaS") return getSaasCompanies();
@@ -77,6 +84,11 @@ export default function Dashboard() {
 
   const ceoCompanies = useMemo(() => {
     if (activeView === "CEOs") return getCeoCompanies();
+    return [];
+  }, [activeView]);
+
+  const marketIntel = useMemo(() => {
+    if (activeView === "MarketIntel") return getMarketIntel();
     return [];
   }, [activeView]);
 
@@ -168,6 +180,9 @@ export default function Dashboard() {
     } else if (activeView === "CEOs") {
       const csv = convertGenericCSV(ceoCompanies, CEO_COLUMNS as { key: string; label: string }[]);
       downloadCSV(csv, `Funded_CEOs_Full.csv`);
+    } else if (activeView === "MarketIntel") {
+      const csv = convertGenericCSV(marketIntel, MARKET_INTEL_COLUMNS as { key: string; label: string }[]);
+      downloadCSV(csv, `Market_Intelligence_Full.csv`);
     } else if (isEnrichedMode) {
       const csv = convertEnrichedToCSV(enrichedCompanies, ENRICHED_COLUMNS);
       downloadCSV(csv, `${activeView}_Companies_Full.csv`);
@@ -192,6 +207,7 @@ export default function Dashboard() {
         : activeView === "AI" ? "AI Companies Database"
         : activeView === "BFSI" ? "BFSI Companies Database"
         : activeView === "CEOs" ? "Funded CEOs Database"
+        : activeView === "MarketIntel" ? "Market Intelligence"
         : "Coaching Institutes Database"
       : activeView === "Jobs" ? "Remote FCCO / FCO Hunt" : "Regulatory CEO Outreach",
     Archive: "Master Archive",
@@ -209,6 +225,8 @@ export default function Dashboard() {
         ? "80,000 India BFSI companies — Banks, FinTechs, NBFCs, SFBs, Insurance — enriched with 26 columns"
         : activeView === "CEOs"
         ? "20,000 funded CEOs globally — enriched with 26 columns including company native country"
+        : activeView === "MarketIntel"
+        ? "5,000 prospects — new appointments, board & director changes — enriched with 26 columns"
         : "40,000 coaching institutes in India — enriched with 26 columns"
       : activeView === "Jobs" ? "Browse and apply to remote compliance roles" : "Discover funded CEOs for fractional engagements",
     Archive: "Track all your outreach activity in one place",
@@ -264,7 +282,10 @@ export default function Dashboard() {
               {activeTab === "Sourcing" && activeView === "CEOs" && (
                 <CeoTable companies={ceoCompanies} />
               )}
-              {activeTab === "Sourcing" && isEnrichedMode && activeView !== "BFSI" && activeView !== "Coaching" && activeView !== "CEOs" && (
+              {activeTab === "Sourcing" && activeView === "MarketIntel" && (
+                <MarketIntelTable companies={marketIntel} />
+              )}
+              {activeTab === "Sourcing" && isEnrichedMode && activeView !== "BFSI" && activeView !== "Coaching" && activeView !== "CEOs" && activeView !== "MarketIntel" && (
                 <EnrichedTable companies={enrichedCompanies} type={activeView as "SaaS" | "AI"} />
               )}
               {activeTab === "Sourcing" && !isEnrichedMode && (
