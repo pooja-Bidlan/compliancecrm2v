@@ -135,7 +135,10 @@ export default function Dashboard() {
   };
 
   const handleExport = () => {
-    if (isEnrichedMode) {
+    if (activeView === "BFSI") {
+      const csv = convertBFSIToCSV(bfsiCompanies);
+      downloadCSV(csv, `BFSI_Companies_Full.csv`);
+    } else if (isEnrichedMode) {
       const csv = convertEnrichedToCSV(enrichedCompanies, ENRICHED_COLUMNS);
       downloadCSV(csv, `${activeView}_Companies_Full.csv`);
     } else {
@@ -143,6 +146,15 @@ export default function Dashboard() {
       downloadCSV(csv, `${activeView}_Archive.csv`);
     }
   };
+
+  function convertBFSIToCSV(data: BFSICompany[]) {
+    if (!data.length) return "";
+    const headers = BFSI_COLUMNS.map((c) => c.label);
+    const rows = data.map((row) =>
+      BFSI_COLUMNS.map((c) => `"${String(row[c.key] ?? "").replace(/"/g, '""')}"`).join(",")
+    );
+    return `${headers.join(",")}\n${rows.join("\n")}`;
+  }
 
   const tabTitles: Record<string, string> = {
     Sourcing: isEnrichedMode
