@@ -11,6 +11,7 @@ import { CoachingTable } from "@/components/dashboard/CoachingTable";
 import { CeoTable } from "@/components/dashboard/CeoTable";
 import { MarketIntelTable } from "@/components/dashboard/MarketIntelTable";
 import { LawyersTable } from "@/components/dashboard/LawyersTable";
+import { RemoteJobsTable } from "@/components/dashboard/RemoteJobsTable";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Search } from "lucide-react";
@@ -21,6 +22,7 @@ import { generateCoachingCompanies, COACHING_COLUMNS, type CoachingCompany } fro
 import { generateFundedCEOs, CEO_COLUMNS, type FundedCEO } from "@/lib/ceo-data";
 import { generateMarketIntel, MARKET_INTEL_COLUMNS, type MarketIntelProspect } from "@/lib/market-intel-data";
 import { generateLawyersPanIndia, generateLawyersDelhiNCR, LAWYER_COLUMNS, type LawyerProspect } from "@/lib/lawyers-data";
+import { generateRemoteJobs, REMOTE_JOB_COLUMNS, type RemoteJob } from "@/lib/remote-jobs-data";
 import { convertToCSV, convertEnrichedToCSV, downloadCSV, type ExportRow } from "@/lib/csv-utils";
 import { useOutreachLogs } from "@/hooks/useOutreachLogs";
 import { useUserProfile } from "@/hooks/useUserProfile";
@@ -36,6 +38,7 @@ let _ceoCompanies: FundedCEO[] | null = null;
 let _marketIntel: MarketIntelProspect[] | null = null;
 let _lawyersPanIndia: LawyerProspect[] | null = null;
 let _lawyersDelhi: LawyerProspect[] | null = null;
+let _remoteJobs: RemoteJob[] | null = null;
 function getSaasCompanies() {
   if (!_saasCompanies) _saasCompanies = generateEnrichedCompanies("SaaS");
   return _saasCompanies;
@@ -68,6 +71,10 @@ function getLawyersDelhi() {
   if (!_lawyersDelhi) _lawyersDelhi = generateLawyersDelhiNCR();
   return _lawyersDelhi;
 }
+function getRemoteJobs() {
+  if (!_remoteJobs) _remoteJobs = generateRemoteJobs();
+  return _remoteJobs;
+}
 
 export default function Dashboard() {
   const [activeView, setActiveView] = useState<ViewMode>("Jobs");
@@ -76,7 +83,7 @@ export default function Dashboard() {
   const { logs, addLog, updateLog } = useOutreachLogs();
   const { profile, updateProfile } = useUserProfile();
 
-  const isEnrichedMode = activeView === "SaaS" || activeView === "AI" || activeView === "BFSI" || activeView === "Coaching" || activeView === "CEOs" || activeView === "MarketIntel" || activeView === "Lawyers" || activeView === "LawyersDelhi";
+  const isEnrichedMode = activeView === "SaaS" || activeView === "AI" || activeView === "BFSI" || activeView === "Coaching" || activeView === "CEOs" || activeView === "MarketIntel" || activeView === "Lawyers" || activeView === "LawyersDelhi" || activeView === "Jobs";
 
   const enrichedCompanies = useMemo(() => {
     if (activeView === "SaaS") return getSaasCompanies();
@@ -111,6 +118,11 @@ export default function Dashboard() {
 
   const lawyersDelhi = useMemo(() => {
     if (activeView === "LawyersDelhi") return getLawyersDelhi();
+    return [];
+  }, [activeView]);
+
+  const remoteJobs = useMemo(() => {
+    if (activeView === "Jobs") return getRemoteJobs();
     return [];
   }, [activeView]);
 
@@ -193,7 +205,10 @@ export default function Dashboard() {
   };
 
   const handleExport = () => {
-    if (activeView === "BFSI") {
+    if (activeView === "Jobs") {
+      const csv = convertGenericCSV(remoteJobs, REMOTE_JOB_COLUMNS as { key: string; label: string }[]);
+      downloadCSV(csv, `Remote_Jobs_Enriched_Full.csv`);
+    } else if (activeView === "BFSI") {
       const csv = convertGenericCSV(bfsiCompanies, BFSI_COLUMNS);
       downloadCSV(csv, `BFSI_Companies_Full.csv`);
     } else if (activeView === "Coaching") {
@@ -231,7 +246,8 @@ export default function Dashboard() {
 
   const tabTitles: Record<string, string> = {
     Sourcing: isEnrichedMode
-      ? activeView === "SaaS" ? "SaaS Companies Database"
+      ? activeView === "Jobs" ? "Remote Jobs Database"
+        : activeView === "SaaS" ? "SaaS Companies Database"
         : activeView === "AI" ? "AI Companies Database"
         : activeView === "BFSI" ? "BFSI Companies Database"
         : activeView === "CEOs" ? "Funded CEOs Database"
@@ -239,7 +255,7 @@ export default function Dashboard() {
         : activeView === "Lawyers" ? "Lawyers & Advocates (Pan-India)"
         : activeView === "LawyersDelhi" ? "Lawyers & Advocates (Delhi NCR)"
         : "Coaching Institutes Database"
-      : activeView === "Jobs" ? "Remote FCCO / FCO Hunt" : "Regulatory CEO Outreach",
+      : "Regulatory CEO Outreach",
     Archive: "Master Archive",
     Inbox: "Response Hub",
     Profile: "Profile & Settings",
@@ -247,7 +263,9 @@ export default function Dashboard() {
 
   const tabDescriptions: Record<string, string> = {
     Sourcing: isEnrichedMode
-      ? activeView === "SaaS"
+      ? activeView === "Jobs"
+        ? "5,000 remote compliance jobs from LinkedIn, Indeed, job sites — enriched with 25 data columns"
+        : activeView === "SaaS"
         ? "10,000 SaaS companies with 50+ employees — enriched with 26 data columns"
         : activeView === "AI"
         ? "5,000 global AI companies with 50+ employees — enriched with 26 data columns"
@@ -262,7 +280,7 @@ export default function Dashboard() {
         : activeView === "LawyersDelhi"
         ? "80,000 practicing lawyers & advocate firms in Delhi NCR — sell LegalTech API access"
         : "40,000 coaching institutes in India — enriched with 26 columns"
-      : activeView === "Jobs" ? "Browse and apply to remote compliance roles" : "Discover funded CEOs for fractional engagements",
+      : "Discover funded CEOs for fractional engagements",
     Archive: "Track all your outreach activity in one place",
     Inbox: "Manage responses and follow-ups",
     Profile: "Configure your outreach profile and templates",
@@ -325,7 +343,10 @@ export default function Dashboard() {
               {activeTab === "Sourcing" && activeView === "LawyersDelhi" && (
                 <LawyersTable companies={lawyersDelhi} variant="delhi-ncr" />
               )}
-              {activeTab === "Sourcing" && isEnrichedMode && activeView !== "BFSI" && activeView !== "Coaching" && activeView !== "CEOs" && activeView !== "MarketIntel" && activeView !== "Lawyers" && activeView !== "LawyersDelhi" && (
+              {activeTab === "Sourcing" && activeView === "Jobs" && (
+                <RemoteJobsTable jobs={remoteJobs} />
+              )}
+              {activeTab === "Sourcing" && isEnrichedMode && activeView !== "BFSI" && activeView !== "Coaching" && activeView !== "CEOs" && activeView !== "MarketIntel" && activeView !== "Lawyers" && activeView !== "LawyersDelhi" && activeView !== "Jobs" && (
                 <EnrichedTable companies={enrichedCompanies} type={activeView as "SaaS" | "AI"} />
               )}
               {activeTab === "Sourcing" && !isEnrichedMode && (
