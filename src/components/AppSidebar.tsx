@@ -41,6 +41,7 @@ const modeItems: { id: ViewMode; icon: typeof Briefcase; label: string; count?: 
   { id: "ComplianceHead", icon: ShieldCheck, label: "Compliance Heads", count: "50K" },
   { id: "CSJob", icon: ScrollText, label: "CS in Service", count: "50K" },
   { id: "CFO", icon: BadgeDollarSign, label: "CFOs / Chief Finance", count: "50K" },
+  { id: "USACompliance", icon: Flag, label: "USA CCOs (Listed)", count: "100K" },
 ];
 
 export function AppSidebar({ activeView, setActiveView, activeTab, setActiveTab, onExport }: AppSidebarProps) {
