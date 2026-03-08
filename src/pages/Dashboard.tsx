@@ -205,7 +205,10 @@ export default function Dashboard() {
   };
 
   const handleExport = () => {
-    if (activeView === "BFSI") {
+    if (activeView === "Jobs") {
+      const csv = convertGenericCSV(remoteJobs, REMOTE_JOB_COLUMNS as { key: string; label: string }[]);
+      downloadCSV(csv, `Remote_Jobs_Enriched_Full.csv`);
+    } else if (activeView === "BFSI") {
       const csv = convertGenericCSV(bfsiCompanies, BFSI_COLUMNS);
       downloadCSV(csv, `BFSI_Companies_Full.csv`);
     } else if (activeView === "Coaching") {
