@@ -6,6 +6,7 @@ import { ArchiveTab } from "@/components/dashboard/ArchiveTab";
 import { InboxTab } from "@/components/dashboard/InboxTab";
 import { ProfileTab } from "@/components/dashboard/ProfileTab";
 import { EnrichedTable } from "@/components/dashboard/EnrichedTable";
+import { BFSITable } from "@/components/dashboard/BFSITable";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Search } from "lucide-react";
