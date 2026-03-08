@@ -104,6 +104,16 @@ export default function Dashboard() {
     return [];
   }, [activeView]);
 
+  const lawyersPanIndia = useMemo(() => {
+    if (activeView === "Lawyers") return getLawyersPanIndia();
+    return [];
+  }, [activeView]);
+
+  const lawyersDelhi = useMemo(() => {
+    if (activeView === "LawyersDelhi") return getLawyersDelhi();
+    return [];
+  }, [activeView]);
+
   const currentLeads = activeView === "Jobs" ? jobs : activeView === "CEOs" ? [] as Lead[] : ceos;
   const filteredLeads = currentLeads.filter(
     (l) =>
