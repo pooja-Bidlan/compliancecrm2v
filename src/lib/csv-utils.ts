@@ -1,3 +1,5 @@
+import type { EnrichedCompany, ENRICHED_COLUMNS } from "./enriched-data";
+
 export interface ExportRow {
   entity: string;
   contact: string;
@@ -20,13 +22,27 @@ export function convertToCSV(data: ExportRow[], type: "Job" | "CEO"): string {
   const rows = data.map((row) => {
     if (type === "Job") {
       return [row.entity, row.contact, row.category, row.email, row.metadata || "", row.location, row.status, row.responseStatus]
-        .map((v) => `"${v}"`)
+        .map((v) => `"${String(v).replace(/"/g, '""')}"`)
         .join(",");
     }
     return [row.entity, row.contact, row.metadata || "", row.category, row.model || "", row.email, row.status, row.responseStatus]
-      .map((v) => `"${v}"`)
+      .map((v) => `"${String(v).replace(/"/g, '""')}"`)
       .join(",");
   });
+  return `${headers.join(",")}\n${rows.join("\n")}`;
+}
+
+export function convertEnrichedToCSV(
+  data: EnrichedCompany[],
+  columns: typeof ENRICHED_COLUMNS
+): string {
+  if (!data.length) return "";
+  const headers = columns.map((c) => c.label);
+  const rows = data.map((row) =>
+    columns
+      .map((c) => `"${String(row[c.key] ?? "").replace(/"/g, '""')}"`)
+      .join(",")
+  );
   return `${headers.join(",")}\n${rows.join("\n")}`;
 }
 

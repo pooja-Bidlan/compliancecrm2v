@@ -6,7 +6,7 @@ import type { Lead } from "@/lib/mock-data";
 
 interface SourcingTabProps {
   leads: Lead[];
-  activeView: "Jobs" | "CEOs";
+  activeView: string;
   onOutreach: (lead: Lead) => void;
 }
 

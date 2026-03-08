@@ -6,7 +6,7 @@ import type { OutreachLog } from "@/hooks/useOutreachLogs";
 
 interface InboxTabProps {
   logs: OutreachLog[];
-  activeView: "Jobs" | "CEOs";
+  activeView: string;
   onUpdateResponse: (id: string, status: string) => void;
   onFollowUp: (log: OutreachLog) => void;
 }
