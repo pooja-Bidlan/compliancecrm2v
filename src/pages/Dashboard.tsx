@@ -9,6 +9,7 @@ import { EnrichedTable } from "@/components/dashboard/EnrichedTable";
 import { BFSITable } from "@/components/dashboard/BFSITable";
 import { CoachingTable } from "@/components/dashboard/CoachingTable";
 import { CeoTable } from "@/components/dashboard/CeoTable";
+import { MarketIntelTable } from "@/components/dashboard/MarketIntelTable";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Search } from "lucide-react";
