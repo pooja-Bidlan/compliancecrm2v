@@ -1,26 +1,48 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, lazy, Suspense } from "react";
 import { SidebarProvider, SidebarTrigger, SidebarInset } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/AppSidebar";
+import { AppSidebar, type ViewMode } from "@/components/AppSidebar";
 import { SourcingTab } from "@/components/dashboard/SourcingTab";
 import { ArchiveTab } from "@/components/dashboard/ArchiveTab";
 import { InboxTab } from "@/components/dashboard/InboxTab";
 import { ProfileTab } from "@/components/dashboard/ProfileTab";
+import { EnrichedTable } from "@/components/dashboard/EnrichedTable";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Search, Zap } from "lucide-react";
+import { Search } from "lucide-react";
 import { generateLeads, type Lead } from "@/lib/mock-data";
-import { convertToCSV, downloadCSV, type ExportRow } from "@/lib/csv-utils";
+import { generateEnrichedCompanies, ENRICHED_COLUMNS, type EnrichedCompany } from "@/lib/enriched-data";
+import { convertToCSV, convertEnrichedToCSV, downloadCSV, type ExportRow } from "@/lib/csv-utils";
 import { useOutreachLogs } from "@/hooks/useOutreachLogs";
 import { useUserProfile } from "@/hooks/useUserProfile";
 
 const { jobs, ceos } = generateLeads();
 
+// Lazy-generate enriched data only when needed
+let _saasCompanies: EnrichedCompany[] | null = null;
+let _aiCompanies: EnrichedCompany[] | null = null;
+function getSaasCompanies() {
+  if (!_saasCompanies) _saasCompanies = generateEnrichedCompanies("SaaS");
+  return _saasCompanies;
+}
+function getAiCompanies() {
+  if (!_aiCompanies) _aiCompanies = generateEnrichedCompanies("AI");
+  return _aiCompanies;
+}
+
 export default function Dashboard() {
-  const [activeView, setActiveView] = useState<"Jobs" | "CEOs">("Jobs");
+  const [activeView, setActiveView] = useState<ViewMode>("Jobs");
   const [activeTab, setActiveTab] = useState("Sourcing");
   const [search, setSearch] = useState("");
   const { logs, addLog, updateLog } = useOutreachLogs();
   const { profile, updateProfile } = useUserProfile();
+
+  const isEnrichedMode = activeView === "SaaS" || activeView === "AI";
+
+  const enrichedCompanies = useMemo(() => {
+    if (activeView === "SaaS") return getSaasCompanies();
+    if (activeView === "AI") return getAiCompanies();
+    return [];
+  }, [activeView]);
 
   const currentLeads = activeView === "Jobs" ? jobs : ceos;
   const filteredLeads = currentLeads.filter(
@@ -30,6 +52,7 @@ export default function Dashboard() {
   );
 
   const repository: (ExportRow & { id: string })[] = useMemo(() => {
+    if (isEnrichedMode) return [];
     const contactedIds = new Set(logs.map((l) => l.target_id));
 
     const fromLogs = logs
@@ -63,7 +86,7 @@ export default function Dashboard() {
       }));
 
     return [...fromLogs, ...fromNew];
-  }, [activeView, currentLeads, logs]);
+  }, [activeView, currentLeads, logs, isEnrichedMode]);
 
   const handleOutreach = async (lead: Lead) => {
     const subject =
@@ -100,19 +123,30 @@ export default function Dashboard() {
   };
 
   const handleExport = () => {
-    const csv = convertToCSV(repository, activeView === "Jobs" ? "Job" : "CEO");
-    downloadCSV(csv, `${activeView}_Archive.csv`);
+    if (isEnrichedMode) {
+      const csv = convertEnrichedToCSV(enrichedCompanies, ENRICHED_COLUMNS);
+      downloadCSV(csv, `${activeView}_Companies_Full.csv`);
+    } else {
+      const csv = convertToCSV(repository, activeView === "Jobs" ? "Job" : "CEO");
+      downloadCSV(csv, `${activeView}_Archive.csv`);
+    }
   };
 
   const tabTitles: Record<string, string> = {
-    Sourcing: activeView === "Jobs" ? "Remote FCCO / FCO Hunt" : "Regulatory CEO Outreach",
+    Sourcing: isEnrichedMode
+      ? activeView === "SaaS" ? "SaaS Companies Database" : "AI Companies Database"
+      : activeView === "Jobs" ? "Remote FCCO / FCO Hunt" : "Regulatory CEO Outreach",
     Archive: "Master Archive",
     Inbox: "Response Hub",
     Profile: "Profile & Settings",
   };
 
   const tabDescriptions: Record<string, string> = {
-    Sourcing: activeView === "Jobs" ? "Browse and apply to remote compliance roles" : "Discover funded CEOs for fractional engagements",
+    Sourcing: isEnrichedMode
+      ? activeView === "SaaS"
+        ? "10,000 SaaS companies with 50+ employees — enriched with 26 data columns"
+        : "5,000 global AI companies with 50+ employees — enriched with 26 data columns"
+      : activeView === "Jobs" ? "Browse and apply to remote compliance roles" : "Discover funded CEOs for fractional engagements",
     Archive: "Track all your outreach activity in one place",
     Inbox: "Manage responses and follow-ups",
     Profile: "Configure your outreach profile and templates",
@@ -142,7 +176,7 @@ export default function Dashboard() {
               </span>
               Active
             </Badge>
-            {(activeTab === "Sourcing" || activeTab === "Archive") && (
+            {!isEnrichedMode && (activeTab === "Sourcing" || activeTab === "Archive") && (
               <div className="relative w-64 hidden md:block">
                 <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
                 <Input
@@ -156,9 +190,12 @@ export default function Dashboard() {
           </header>
 
           <div className="flex-1 p-4 lg:p-8">
-            <div key={activeTab} className="animate-fade-in">
-              {activeTab === "Sourcing" && (
-                <SourcingTab leads={filteredLeads} activeView={activeView} onOutreach={handleOutreach} />
+            <div key={`${activeTab}-${activeView}`} className="animate-fade-in">
+              {activeTab === "Sourcing" && isEnrichedMode && (
+                <EnrichedTable companies={enrichedCompanies} type={activeView as "SaaS" | "AI"} />
+              )}
+              {activeTab === "Sourcing" && !isEnrichedMode && (
+                <SourcingTab leads={filteredLeads} activeView={activeView as "Jobs" | "CEOs"} onOutreach={handleOutreach} />
               )}
               {activeTab === "Archive" && (
                 <ArchiveTab
