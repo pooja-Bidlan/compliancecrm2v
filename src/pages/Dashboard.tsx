@@ -190,7 +190,7 @@ export default function Dashboard() {
         : activeView === "AI"
         ? "5,000 global AI companies with 50+ employees — enriched with 26 data columns"
         : activeView === "BFSI"
-        ? "50,000 global BFSI companies — Banks, FinTechs, NBFCs, SFBs, Insurance — enriched with 26 columns"
+        ? "80,000 India BFSI companies — Banks, FinTechs, NBFCs, SFBs, Insurance — enriched with 26 columns"
         : "30,000 coaching institutes in India & globally — enriched with 26 columns"
       : activeView === "Jobs" ? "Browse and apply to remote compliance roles" : "Discover funded CEOs for fractional engagements",
     Archive: "Track all your outreach activity in one place",

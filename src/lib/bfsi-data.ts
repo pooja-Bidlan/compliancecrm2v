@@ -31,26 +31,7 @@ const bfsiCategories = [
 ];
 
 const countries = [
-  { name: "India", cities: ["Mumbai", "Delhi", "Bangalore", "Chennai", "Hyderabad", "Pune", "Kolkata", "Ahmedabad", "Jaipur", "Lucknow", "Chandigarh", "Kochi", "Noida", "Gurugram"], region: "Asia Pacific" },
-  { name: "United States", cities: ["New York", "San Francisco", "Chicago", "Charlotte", "Boston", "Houston", "Dallas", "Miami", "Atlanta", "Seattle"], region: "North America" },
-  { name: "United Kingdom", cities: ["London", "Edinburgh", "Manchester", "Birmingham", "Leeds"], region: "Europe" },
-  { name: "Singapore", cities: ["Singapore"], region: "Asia Pacific" },
-  { name: "UAE", cities: ["Dubai", "Abu Dhabi", "DIFC"], region: "Middle East" },
-  { name: "Hong Kong", cities: ["Hong Kong", "Central"], region: "Asia Pacific" },
-  { name: "Japan", cities: ["Tokyo", "Osaka", "Yokohama"], region: "Asia Pacific" },
-  { name: "Germany", cities: ["Frankfurt", "Berlin", "Munich", "Hamburg"], region: "Europe" },
-  { name: "Switzerland", cities: ["Zurich", "Geneva", "Basel"], region: "Europe" },
-  { name: "Canada", cities: ["Toronto", "Montreal", "Vancouver", "Calgary"], region: "North America" },
-  { name: "Australia", cities: ["Sydney", "Melbourne", "Brisbane"], region: "Asia Pacific" },
-  { name: "China", cities: ["Shanghai", "Beijing", "Shenzhen", "Guangzhou"], region: "Asia Pacific" },
-  { name: "South Korea", cities: ["Seoul", "Busan"], region: "Asia Pacific" },
-  { name: "Brazil", cities: ["São Paulo", "Rio de Janeiro", "Brasília"], region: "South America" },
-  { name: "South Africa", cities: ["Johannesburg", "Cape Town"], region: "Africa" },
-  { name: "Nigeria", cities: ["Lagos", "Abuja"], region: "Africa" },
-  { name: "Kenya", cities: ["Nairobi"], region: "Africa" },
-  { name: "Indonesia", cities: ["Jakarta", "Surabaya"], region: "Asia Pacific" },
-  { name: "Malaysia", cities: ["Kuala Lumpur"], region: "Asia Pacific" },
-  { name: "Thailand", cities: ["Bangkok"], region: "Asia Pacific" },
+  { name: "India", cities: ["Mumbai", "Delhi", "Bangalore", "Chennai", "Hyderabad", "Pune", "Kolkata", "Ahmedabad", "Jaipur", "Lucknow", "Chandigarh", "Kochi", "Noida", "Gurugram", "Indore", "Bhopal", "Vadodara", "Surat", "Nagpur", "Visakhapatnam", "Coimbatore", "Thiruvananthapuram", "Patna", "Ranchi", "Bhubaneswar", "Guwahati", "Dehradun", "Mysuru", "Mangalore", "Rajkot"], region: "India" },
 ];
 
 const firstNames = [
@@ -176,7 +157,7 @@ export const BFSI_COLUMNS: { key: keyof BFSICompany; label: string }[] = [
 ];
 
 export function generateBFSICompanies(): BFSICompany[] {
-  const count = 50000;
+  const count = 80000;
   const rand = seededRandom(31337);
   const results: BFSICompany[] = [];
 
