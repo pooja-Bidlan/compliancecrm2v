@@ -128,7 +128,7 @@ export function SourcingTab({ leads, activeView, onOutreach }: SourcingTabProps)
       {totalPages > 1 && (
         <div className="flex items-center justify-between pt-2">
           <p className="text-xs text-muted-foreground">
-            Showing {(page * PAGE_SIZE + 1).toLocaleString()}–{Math.min((page + 1) * PAGE_SIZE, leads.length).toLocaleString()} of {leads.length.toLocaleString()}
+            Showing {(page * PAGE_SIZE + 1).toLocaleString()}–{Math.min((page + 1) * PAGE_SIZE, filtered.length).toLocaleString()} of {filtered.length.toLocaleString()}
           </p>
           <div className="flex items-center gap-2">
             <Button
