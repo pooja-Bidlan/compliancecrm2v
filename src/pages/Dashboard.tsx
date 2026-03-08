@@ -36,6 +36,7 @@ import { generateICAIPractitioners, ICAI_COLUMNS, type ICAIPractitioner } from "
 import { generateComplianceHeads, COMPLIANCE_HEAD_COLUMNS, type ComplianceHeadRecord } from "@/lib/compliance-head-data";
 import { generateCSJobRecords, CS_JOB_COLUMNS, type CSJobRecord } from "@/lib/cs-job-data";
 import { generateCFORecords, CFO_COLUMNS, type CFORecord } from "@/lib/cfo-data";
+import { generateUSAComplianceRecords, USA_COMPLIANCE_COLUMNS, type USAComplianceRecord } from "@/lib/usa-compliance-data";
 import { convertToCSV, convertEnrichedToCSV, downloadCSV, type ExportRow } from "@/lib/csv-utils";
 import { useOutreachLogs } from "@/hooks/useOutreachLogs";
 import { useUserProfile } from "@/hooks/useUserProfile";
