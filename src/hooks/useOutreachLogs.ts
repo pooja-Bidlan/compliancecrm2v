@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
 
 export interface OutreachLog {
   id: string;
@@ -19,17 +20,19 @@ export interface OutreachLog {
   created_at: string;
 }
 
-const ANON_USER_ID = "anon";
-
 export function useOutreachLogs() {
+  const { user } = useAuth();
   const [logs, setLogs] = useState<OutreachLog[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!user) { setLoading(false); return; }
+
     const fetchLogs = async () => {
       const { data } = await supabase
         .from("outreach_logs")
         .select("*")
+        .eq("user_id", user.id)
         .order("created_at", { ascending: false });
       setLogs((data as OutreachLog[]) || []);
       setLoading(false);
@@ -44,14 +47,16 @@ export function useOutreachLogs() {
       .subscribe();
 
     return () => { supabase.removeChannel(channel); };
-  }, []);
+  }, [user]);
 
   const addLog = async (log: Omit<OutreachLog, "id" | "user_id" | "created_at" | "last_outreach_at">) => {
-    await supabase.from("outreach_logs").insert({ ...log, user_id: ANON_USER_ID });
+    if (!user) return;
+    await supabase.from("outreach_logs").insert({ ...log, user_id: user.id });
   };
 
   const updateLog = async (id: string, updates: Partial<OutreachLog>) => {
-    await supabase.from("outreach_logs").update(updates).eq("id", id);
+    if (!user) return;
+    await supabase.from("outreach_logs").update(updates).eq("id", id).eq("user_id", user.id);
   };
 
   return { logs, loading, addLog, updateLog };
