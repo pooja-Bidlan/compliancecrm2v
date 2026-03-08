@@ -155,31 +155,33 @@ export default function Dashboard() {
             )}
           </header>
 
-          <div className="flex-1 p-4 lg:p-8 animate-fade-in">
-            {activeTab === "Sourcing" && (
-              <SourcingTab leads={filteredLeads} activeView={activeView} onOutreach={handleOutreach} />
-            )}
-            {activeTab === "Archive" && (
-              <ArchiveTab
-                rows={repository.filter(
-                  (r) =>
-                    r.entity.toLowerCase().includes(search.toLowerCase()) ||
-                    r.contact.toLowerCase().includes(search.toLowerCase())
-                )}
-                onUpdateResponse={(id, st) => updateLog(id, { response_status: st })}
-              />
-            )}
-            {activeTab === "Inbox" && (
-              <InboxTab
-                logs={logs}
-                activeView={activeView}
-                onUpdateResponse={(id, st) => updateLog(id, { response_status: st })}
-                onFollowUp={handleFollowUp}
-              />
-            )}
-            {activeTab === "Profile" && (
-              <ProfileTab profile={profile} onSave={updateProfile} />
-            )}
+          <div className="flex-1 p-4 lg:p-8">
+            <div key={activeTab} className="animate-fade-in">
+              {activeTab === "Sourcing" && (
+                <SourcingTab leads={filteredLeads} activeView={activeView} onOutreach={handleOutreach} />
+              )}
+              {activeTab === "Archive" && (
+                <ArchiveTab
+                  rows={repository.filter(
+                    (r) =>
+                      r.entity.toLowerCase().includes(search.toLowerCase()) ||
+                      r.contact.toLowerCase().includes(search.toLowerCase())
+                  )}
+                  onUpdateResponse={(id, st) => updateLog(id, { response_status: st })}
+                />
+              )}
+              {activeTab === "Inbox" && (
+                <InboxTab
+                  logs={logs}
+                  activeView={activeView}
+                  onUpdateResponse={(id, st) => updateLog(id, { response_status: st })}
+                  onFollowUp={handleFollowUp}
+                />
+              )}
+              {activeTab === "Profile" && (
+                <ProfileTab profile={profile} onSave={updateProfile} />
+              )}
+            </div>
           </div>
         </SidebarInset>
       </div>
