@@ -119,10 +119,14 @@ export function AppSidebar({ activeView, setActiveView, activeTab, setActiveTab,
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="p-4">
+      <SidebarFooter className="p-4 space-y-2">
         <Button variant="outline" size="sm" className="w-full justify-start gap-2 text-xs border-sidebar-border text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent rounded-lg" onClick={onExport}>
           <Download className="h-3.5 w-3.5" />
           Export CSV
+        </Button>
+        <Button variant="ghost" size="sm" className="w-full justify-start gap-2 text-xs text-sidebar-foreground/50 hover:text-destructive" onClick={async () => { const { supabase } = await import("@/integrations/supabase/client"); await supabase.auth.signOut(); }}>
+          <LogOut className="h-3.5 w-3.5" />
+          Sign Out
         </Button>
       </SidebarFooter>
     </Sidebar>
