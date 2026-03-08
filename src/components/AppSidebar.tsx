@@ -1,4 +1,4 @@
-import { Briefcase, Users, Rocket, Archive, Inbox, Download, UserCircle, LogOut } from "lucide-react";
+import { Briefcase, Users, Rocket, Archive, Inbox, Download, UserCircle } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -13,7 +13,6 @@ import {
   SidebarSeparator,
 } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
-import { useAuth } from "@/hooks/useAuth";
 
 interface AppSidebarProps {
   activeView: "Jobs" | "CEOs";
@@ -24,8 +23,6 @@ interface AppSidebarProps {
 }
 
 export function AppSidebar({ activeView, setActiveView, activeTab, setActiveTab, onExport }: AppSidebarProps) {
-  const { signOut } = useAuth();
-
   const navItems = [
     { id: "Sourcing", icon: Rocket, label: "Live Pipeline" },
     { id: "Archive", icon: Archive, label: "Master Archive" },
@@ -105,10 +102,6 @@ export function AppSidebar({ activeView, setActiveView, activeTab, setActiveTab,
         <Button variant="outline" size="sm" className="w-full justify-start gap-2 text-xs" onClick={onExport}>
           <Download className="h-3.5 w-3.5" />
           Export CSV
-        </Button>
-        <Button variant="ghost" size="sm" className="w-full justify-start gap-2 text-xs text-destructive hover:text-destructive" onClick={signOut}>
-          <LogOut className="h-3.5 w-3.5" />
-          Sign Out
         </Button>
       </SidebarFooter>
     </Sidebar>
