@@ -45,6 +45,10 @@ function getCoachingCompanies() {
   if (!_coachingCompanies) _coachingCompanies = generateCoachingCompanies();
   return _coachingCompanies;
 }
+function getCeoCompanies() {
+  if (!_ceoCompanies) _ceoCompanies = generateFundedCEOs();
+  return _ceoCompanies;
+}
 
 export default function Dashboard() {
   const [activeView, setActiveView] = useState<ViewMode>("Jobs");
