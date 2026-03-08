@@ -1,4 +1,4 @@
-import { Briefcase, Users, Rocket, Archive, Inbox, Download, UserCircle, Building2, Bot, Landmark, GraduationCap, Newspaper } from "lucide-react";
+import { Briefcase, Users, Rocket, Archive, Inbox, Download, UserCircle, Building2, Bot, Landmark, GraduationCap, Newspaper, Scale } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -15,7 +15,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
-export type ViewMode = "Jobs" | "CEOs" | "SaaS" | "AI" | "BFSI" | "Coaching" | "MarketIntel";
+export type ViewMode = "Jobs" | "CEOs" | "SaaS" | "AI" | "BFSI" | "Coaching" | "MarketIntel" | "Lawyers" | "LawyersDelhi";
 
 interface AppSidebarProps {
   activeView: ViewMode;
@@ -33,6 +33,8 @@ const modeItems: { id: ViewMode; icon: typeof Briefcase; label: string; count?: 
   { id: "BFSI", icon: Landmark, label: "BFSI India", count: "80K" },
   { id: "Coaching", icon: GraduationCap, label: "Coaching India", count: "40K" },
   { id: "MarketIntel", icon: Newspaper, label: "Market Intelligence", count: "5K" },
+  { id: "Lawyers", icon: Scale, label: "Lawyers Pan-India", count: "100K" },
+  { id: "LawyersDelhi", icon: Scale, label: "Lawyers Delhi NCR", count: "80K" },
 ];
 
 export function AppSidebar({ activeView, setActiveView, activeTab, setActiveTab, onExport }: AppSidebarProps) {

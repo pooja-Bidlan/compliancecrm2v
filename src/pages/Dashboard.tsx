@@ -10,6 +10,7 @@ import { BFSITable } from "@/components/dashboard/BFSITable";
 import { CoachingTable } from "@/components/dashboard/CoachingTable";
 import { CeoTable } from "@/components/dashboard/CeoTable";
 import { MarketIntelTable } from "@/components/dashboard/MarketIntelTable";
+import { LawyersTable } from "@/components/dashboard/LawyersTable";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Search } from "lucide-react";
@@ -19,6 +20,7 @@ import { generateBFSICompanies, BFSI_COLUMNS, type BFSICompany } from "@/lib/bfs
 import { generateCoachingCompanies, COACHING_COLUMNS, type CoachingCompany } from "@/lib/coaching-data";
 import { generateFundedCEOs, CEO_COLUMNS, type FundedCEO } from "@/lib/ceo-data";
 import { generateMarketIntel, MARKET_INTEL_COLUMNS, type MarketIntelProspect } from "@/lib/market-intel-data";
+import { generateLawyersPanIndia, generateLawyersDelhiNCR, LAWYER_COLUMNS, type LawyerProspect } from "@/lib/lawyers-data";
 import { convertToCSV, convertEnrichedToCSV, downloadCSV, type ExportRow } from "@/lib/csv-utils";
 import { useOutreachLogs } from "@/hooks/useOutreachLogs";
 import { useUserProfile } from "@/hooks/useUserProfile";
@@ -32,6 +34,8 @@ let _bfsiCompanies: BFSICompany[] | null = null;
 let _coachingCompanies: CoachingCompany[] | null = null;
 let _ceoCompanies: FundedCEO[] | null = null;
 let _marketIntel: MarketIntelProspect[] | null = null;
+let _lawyersPanIndia: LawyerProspect[] | null = null;
+let _lawyersDelhi: LawyerProspect[] | null = null;
 function getSaasCompanies() {
   if (!_saasCompanies) _saasCompanies = generateEnrichedCompanies("SaaS");
   return _saasCompanies;
@@ -56,6 +60,14 @@ function getMarketIntel() {
   if (!_marketIntel) _marketIntel = generateMarketIntel();
   return _marketIntel;
 }
+function getLawyersPanIndia() {
+  if (!_lawyersPanIndia) _lawyersPanIndia = generateLawyersPanIndia();
+  return _lawyersPanIndia;
+}
+function getLawyersDelhi() {
+  if (!_lawyersDelhi) _lawyersDelhi = generateLawyersDelhiNCR();
+  return _lawyersDelhi;
+}
 
 export default function Dashboard() {
   const [activeView, setActiveView] = useState<ViewMode>("Jobs");
@@ -64,7 +76,7 @@ export default function Dashboard() {
   const { logs, addLog, updateLog } = useOutreachLogs();
   const { profile, updateProfile } = useUserProfile();
 
-  const isEnrichedMode = activeView === "SaaS" || activeView === "AI" || activeView === "BFSI" || activeView === "Coaching" || activeView === "CEOs" || activeView === "MarketIntel";
+  const isEnrichedMode = activeView === "SaaS" || activeView === "AI" || activeView === "BFSI" || activeView === "Coaching" || activeView === "CEOs" || activeView === "MarketIntel" || activeView === "Lawyers" || activeView === "LawyersDelhi";
 
   const enrichedCompanies = useMemo(() => {
     if (activeView === "SaaS") return getSaasCompanies();
@@ -89,6 +101,16 @@ export default function Dashboard() {
 
   const marketIntel = useMemo(() => {
     if (activeView === "MarketIntel") return getMarketIntel();
+    return [];
+  }, [activeView]);
+
+  const lawyersPanIndia = useMemo(() => {
+    if (activeView === "Lawyers") return getLawyersPanIndia();
+    return [];
+  }, [activeView]);
+
+  const lawyersDelhi = useMemo(() => {
+    if (activeView === "LawyersDelhi") return getLawyersDelhi();
     return [];
   }, [activeView]);
 
@@ -183,6 +205,12 @@ export default function Dashboard() {
     } else if (activeView === "MarketIntel") {
       const csv = convertGenericCSV(marketIntel, MARKET_INTEL_COLUMNS as { key: string; label: string }[]);
       downloadCSV(csv, `Market_Intelligence_Full.csv`);
+    } else if (activeView === "Lawyers") {
+      const csv = convertGenericCSV(lawyersPanIndia, LAWYER_COLUMNS as { key: string; label: string }[]);
+      downloadCSV(csv, `Lawyers_PanIndia_Full.csv`);
+    } else if (activeView === "LawyersDelhi") {
+      const csv = convertGenericCSV(lawyersDelhi, LAWYER_COLUMNS as { key: string; label: string }[]);
+      downloadCSV(csv, `Lawyers_DelhiNCR_Full.csv`);
     } else if (isEnrichedMode) {
       const csv = convertEnrichedToCSV(enrichedCompanies, ENRICHED_COLUMNS);
       downloadCSV(csv, `${activeView}_Companies_Full.csv`);
@@ -208,6 +236,8 @@ export default function Dashboard() {
         : activeView === "BFSI" ? "BFSI Companies Database"
         : activeView === "CEOs" ? "Funded CEOs Database"
         : activeView === "MarketIntel" ? "Market Intelligence"
+        : activeView === "Lawyers" ? "Lawyers & Advocates (Pan-India)"
+        : activeView === "LawyersDelhi" ? "Lawyers & Advocates (Delhi NCR)"
         : "Coaching Institutes Database"
       : activeView === "Jobs" ? "Remote FCCO / FCO Hunt" : "Regulatory CEO Outreach",
     Archive: "Master Archive",
@@ -227,6 +257,10 @@ export default function Dashboard() {
         ? "20,000 funded CEOs globally — enriched with 26 columns including company native country"
         : activeView === "MarketIntel"
         ? "5,000 prospects — new appointments, board & director changes — enriched with 26 columns"
+        : activeView === "Lawyers"
+        ? "100,000 practicing lawyers & advocate firms across India (excl. Delhi NCR) — sell LegalTech API access"
+        : activeView === "LawyersDelhi"
+        ? "80,000 practicing lawyers & advocate firms in Delhi NCR — sell LegalTech API access"
         : "40,000 coaching institutes in India — enriched with 26 columns"
       : activeView === "Jobs" ? "Browse and apply to remote compliance roles" : "Discover funded CEOs for fractional engagements",
     Archive: "Track all your outreach activity in one place",
@@ -285,7 +319,13 @@ export default function Dashboard() {
               {activeTab === "Sourcing" && activeView === "MarketIntel" && (
                 <MarketIntelTable companies={marketIntel} />
               )}
-              {activeTab === "Sourcing" && isEnrichedMode && activeView !== "BFSI" && activeView !== "Coaching" && activeView !== "CEOs" && activeView !== "MarketIntel" && (
+              {activeTab === "Sourcing" && activeView === "Lawyers" && (
+                <LawyersTable companies={lawyersPanIndia} variant="pan-india" />
+              )}
+              {activeTab === "Sourcing" && activeView === "LawyersDelhi" && (
+                <LawyersTable companies={lawyersDelhi} variant="delhi-ncr" />
+              )}
+              {activeTab === "Sourcing" && isEnrichedMode && activeView !== "BFSI" && activeView !== "Coaching" && activeView !== "CEOs" && activeView !== "MarketIntel" && activeView !== "Lawyers" && activeView !== "LawyersDelhi" && (
                 <EnrichedTable companies={enrichedCompanies} type={activeView as "SaaS" | "AI"} />
               )}
               {activeTab === "Sourcing" && !isEnrichedMode && (
